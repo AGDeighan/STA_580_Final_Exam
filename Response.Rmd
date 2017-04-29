@@ -1,0 +1,156 @@
+---
+title: "STA 580 Final Exam"
+author: "Andrew Deighan"
+date: "April 29, 2017"
+output: html_document
+---
+
+# Answers
+
+## Question 1
+
+  For code see [appendix](#a1).
+  
+> An educator believes that a new reading curriculum will help elementary school students improve some aspects of their reading ability. She arranges for a third-grade class of 21 students to take part in the new curriculum for an eight-week period. A control classroom of 23 third-graders follows the standard curriculum. At the end of the eight weeks, all students are given a Degree of Reading Power (DRP) test, which measures aspects of reading that the treatment is designed to improve “DRPscores.txt”.
+>
+> Test the hypothesis that the treatment group performed better than the control group on the test. State your conclusions.
+
+```{r, include = F}
+
+q1.data <- data.frame(read.table("data/DRPscores.txt", header = F, sep = ""))
+colnames(q1.data) <- c("Group", "Score")
+q1.data.treat <- q1.data[q1.data$Group == "Treat",]
+q1.data.contr <- q1.data[q1.data$Group == "Control",]
+
+```
+
+  The size of our control group is 23 and the size of our treatment group is 21. Since these sample sizes are both less than 30 we should use a t-test of sample means. Before doing so however, we need to check that our assumption that the data are normally distributed is valid. To this end we will use the Shapiro-Wilk test for normality. The null hypothesis of the Shapiro-Wilk test is that the data are normally distributed and the alternative hypothesis is that they are not. Thus a small p-value (less than 0.05) indicates that the data are *not* normally distributed whereas a large p-value indicates that there is no significant evidence that the data are not normally distributed. Table 1 gives the p-values for the Shapiro-Wilk test for both groups. The large p-values indicate that we fail to reject the null hypothesis and conclude that the data are normally distributed.
+  
+```{r, include=F}
+
+Nt.c <- shapiro.test(q1.data.contr$Score)
+Nt.t <- shapiro.test(q1.data.treat$Score)
+
+```
+
+```{r, echo =F, results = "asis"}
+library(pander)
+
+x <- data.frame(Group = c("Treatment", "Control"), "P-Value" = c(Nt.t$p.value, Nt.c$p.value) )
+
+pandoc.table(x,
+             caption = "**Table 1:** P-values for Shapiro-Wilk tests for normality. The large p-values for both groups indicate that there is no evidence that either group is *not* normally distributed.",
+             split.table = Inf)
+
+```
+
+  Next we need to test if the variances of the underlying populations for the two samples is significantly different. For this we will use an F-test for the equality of population variances. The null hypothesis for the F-test is that the two population variances are equal, the alternative is that they are not equal (for the two-tailed scenario, which is what we are interested in). The test-statistic for the F-test is the ratio of the two sample variances (sample 1 variance to sample 2 variance), the further away from 1 the test-statistic is the more likely it is that the null hypothesis is false. Under the null hypothesis (that the two population variances are equal), the test-statistic has an F-distribution with numerator degrees of freedom equal to the size of first sample minus 1, and denominator degrees of freedom equal to the size of the second sample minus 1. See below.
+
+  $$ \text{F} = \frac{S_1^2}{S_2^2} \sim F_{(n_1 - 1)(n_2 - 2)} $$
+
+  We can use the "var.test()" function in R to perform the above described F-test. For small p-values (< 0.05) we should reject the null hypothesis that the population variances are equal in favor of the alternative hypothesis that they are different. For large p-value we should fail to reject the null hypothesis and conclude that the population variances are equal. Table 2 reports the calculated F-statistic and corresponding p-value. The p-value is greater than 0.05 so we fail to reject the null hypothesis and conclude that the two populations have the same variance.
+  
+```{r, include=F}
+
+VT <- var.test(q1.data.treat$Score, q1.data.contr$Score)
+
+```
+  
+
+```{r, echo=F, results="asis"}
+
+x <- data.frame("F" = VT$statistic, "P-Value" = VT$p.value)
+
+pandoc.table(x,
+             caption = "**Table 2:** Test statistic corresponding p-value for test of equality of variances. Since the p-value is greater than 0.05 (even if just so) we will conclude that the population variances can be assumed similar.",
+             split.table = Inf)
+
+```
+
+  Now that we have verified our assumptions that the two populations have are normally distributed with equal variances, we will perform a one-tailed two-sample t-test for the difference of means. Our null hypothesis is that the mean score of students taught with the new curriculum is no greater than students taught under the old curriculum; our alternative hypothesis is that the mean score is higher.
+  
+  $$ \text{H}_o: \mu_t - \mu_c \leq 0 \space \space \space \space \space v.s. \space \space \space \space \text{H}_a: \mu_t - \mu_c > 0$$
+  The test-statistic for this test is the difference between the sample means divided by the pooled sample variance. Under the null hypothesis this test-statistic has a t-distribution with degrees of freedom equal to the sum of the sample sizes minus 2.
+  
+  $$ \text{T} = \frac{\bar{x_t} - \bar{x_c}}{S_p  \sqrt{ \frac{1}{n_1} + \frac{1}{n_2} }} \sim{t_{n_1 + n_2 - 2}} \\  \\ \text{where:} \space \space \space S_p = \sqrt{ \frac{ (n_1 -1)S_1^2 + (n_2 - 1)S_2^2 }{n_1 + n_2 - 2} }$$
+
+  The large a positive test-statistic we observe the more likely it is that the mean score of students taught under the new curriculum is greater than that of those taught under the old curriculum. We will use and alpha level of 0.05, so we will reject our null hypothesis if the p-value (probability of observing a value larger than the one we observe) of our observed test-stastic is less than 0.05. We can use the R function "t.test()" to perform this test. Table 3 reports observed test-statistic and corresponding p-value.
+  
+```{r, include=F}
+
+tT <- t.test(x = q1.data.treat$Score, y = q1.data.contr$Score, alternative = "greater", var.equal = T)
+
+```
+
+```{r, echo=F, results="asis"}
+
+x <- data.frame("T" = tT$statistic, "P-Value" = tT$p.value)
+rownames(x) <- NULL
+
+pandoc.table(x,
+             caption = "**Table 3:** Test-statistc and corresponding p-value for one-tailed two-sample t-test.",
+             split.table = Inf)
+
+```
+
+  Since our p-value is less than 0.05 we reject the null hypothesis that the mean scores did not differ in favor of the alternative hypothesis that they did. Thus, we conclude that the students taught under the new curriculum performed better on the test than students taught under the old curriculum.
+
+
+
+
+
+# Appendix
+
+## A1
+
+```{r, eval=F}
+
+q1.data <- data.frame(read.table("data/DRPscores.txt", header = F, sep = ""))
+colnames(q1.data) <- c("Group", "Score")
+q1.data.treat <- q1.data[q1.data$Group == "Treat",]
+q1.data.contr <- q1.data[q1.data$Group == "Control",]
+
+###
+
+Nt.c <- shapiro.test(q1.data.contr$Score)
+Nt.t <- shapiro.test(q1.data.treat$Score)
+
+###
+
+library(pander)
+
+x <- data.frame(Group = c("Treatment", "Control"), "P-Value" = c(Nt.t$p.value, Nt.c$p.value) )
+
+pandoc.table(x,
+             caption = "**Table 1:** P-values for Shapiro-Wilk tests for normality. The large p-values for both groups indicate that there is no evidence that either group is *not* normally distributed.",
+             split.table = Inf)
+
+###
+
+VT <- var.test(q1.data.treat$Score, q1.data.contr$Score)
+
+###
+
+x <- data.frame("F" = VT$statistic, "P-Value" = VT$p.value)
+
+pandoc.table(x,
+             caption = "**Table 2:** Test statistic corresponding p-value for test of equality of variances. Since the p-value is greater than 0.05 (even if just so) we will conclude that the population variances can be assumed similar.",
+             split.table = Inf)
+
+###
+
+tT <- t.test(x = q1.data.treat$Score, y = q1.data.contr$Score, alternative = "greater", var.equal = T)
+
+###
+
+x <- data.frame("T" = tT$statistic, "P-Value" = tT$p.value)
+rownames(x) <- NULL
+
+pandoc.table(x,
+             caption = "**Table 3:** Test-statistc and corresponding p-value for one-tailed two-sample t-test.",
+             split.table = Inf)
+
+```
+
+
+
