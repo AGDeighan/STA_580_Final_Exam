@@ -126,6 +126,7 @@ $(document).ready(function () {
 
 <div id="answers" class="section level1">
 <h1>Answers</h1>
+<p><br></p>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
 <p>For code see <a href="#a1">appendix</a>.</p>
@@ -135,7 +136,6 @@ $(document).ready(function () {
 </blockquote>
 <p>The size of our control group is 23 and the size of our treatment group is 21. Since these sample sizes are both less than 30 we should use a t-test of sample means. Before doing so however, we need to check that our assumption that the data are normally distributed is valid. To this end we will use the Shapiro-Wilk test for normality. The null hypothesis of the Shapiro-Wilk test is that the data are normally distributed and the alternative hypothesis is that they are not. Thus a small p-value (less than 0.05) indicates that the data are <em>not</em> normally distributed whereas a large p-value indicates that there is no significant evidence that the data are not normally distributed. Table 1 gives the p-values for the Shapiro-Wilk test for both groups. The large p-values indicate that we fail to reject the null hypothesis and conclude that the data are normally distributed.</p>
 <table style="width:28%;">
-<caption><strong>Table 1:</strong> P-values for Shapiro-Wilk tests for normality. The large p-values for both groups indicate that there is no evidence that either group is <em>not</em> normally distributed.</caption>
 <colgroup>
 <col width="13%"></col>
 <col width="13%"></col>
@@ -157,11 +157,11 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
+<p><strong>Table 1:</strong> P-values for Shapiro-Wilk tests for normality. The large p-values for both groups indicate that there is no evidence that either group is <em>not</em> normally distributed.</p>
 <p>Next we need to test if the variances of the underlying populations for the two samples is significantly different. For this we will use an F-test for the equality of population variances. The null hypothesis for the F-test is that the two population variances are equal, the alternative is that they are not equal (for the two-tailed scenario, which is what we are interested in). The test-statistic for the F-test is the ratio of the two sample variances (sample 1 variance to sample 2 variance), the further away from 1 the test-statistic is the more likely it is that the null hypothesis is false. Under the null hypothesis (that the two population variances are equal), the test-statistic has an F-distribution with numerator degrees of freedom equal to the size of first sample minus 1, and denominator degrees of freedom equal to the size of the second sample minus 1. See below.</p>
 <p><span class="math display">\[ \text{F} = \frac{S_1^2}{S_2^2} \sim F_{(n_1 - 1)(n_2 - 2)} \]</span></p>
 <p>We can use the “var.test()” function in R to perform the above described F-test. For small p-values (&lt; 0.05) we should reject the null hypothesis that the population variances are equal in favor of the alternative hypothesis that they are different. For large p-value we should fail to reject the null hypothesis and conclude that the population variances are equal. Table 2 reports the calculated F-statistic and corresponding p-value. The p-value is greater than 0.05 so we fail to reject the null hypothesis and conclude that the two populations have the same variance.</p>
 <table style="width:32%;">
-<caption><strong>Table 2:</strong> Test statistic corresponding p-value for test of equality of variances. Since the p-value is greater than 0.05 (even if just so) we will conclude that the population variances can be assumed similar.</caption>
 <colgroup>
 <col width="11%"></col>
 <col width="8%"></col>
@@ -182,12 +182,12 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
+<p><strong>Table 2:</strong> Test statistic corresponding p-value for test of equality of variances. Since the p-value is greater than 0.05 (even if just so) we will conclude that the population variances can be assumed similar.</p>
 <p>Now that we have verified our assumptions that the two populations have are normally distributed with equal variances, we will perform a one-tailed two-sample t-test for the difference of means. Our null hypothesis is that the mean score of students taught with the new curriculum is no greater than students taught under the old curriculum; our alternative hypothesis is that the mean score is higher.</p>
 <p><span class="math display">\[ \text{H}_o: \mu_t - \mu_c \leq 0 \space \space \space \space \space v.s. \space \space \space \space \text{H}_a: \mu_t - \mu_c &gt; 0\]</span> The test-statistic for this test is the difference between the sample means divided by the pooled sample variance. Under the null hypothesis this test-statistic has a t-distribution with degrees of freedom equal to the sum of the sample sizes minus 2.</p>
 <p><span class="math display">\[ \text{T} = \frac{\bar{x_t} - \bar{x_c}}{S_p  \sqrt{ \frac{1}{n_1} + \frac{1}{n_2} }} \sim{t_{n_1 + n_2 - 2}} \\  \\ \text{where:} \space \space \space S_p = \sqrt{ \frac{ (n_1 -1)S_1^2 + (n_2 - 1)S_2^2 }{n_1 + n_2 - 2} }\]</span></p>
 <p>The large a positive test-statistic we observe the more likely it is that the mean score of students taught under the new curriculum is greater than that of those taught under the old curriculum. We will use and alpha level of 0.05, so we will reject our null hypothesis if the p-value (probability of observing a value larger than the one we observe) of our observed test-stastic is less than 0.05. We can use the R function “t.test()” to perform this test. Table 3 reports observed test-statistic and corresponding p-value.</p>
 <table style="width:21%;">
-<caption><strong>Table 3:</strong> Test-statistc and corresponding p-value for one-tailed two-sample t-test.</caption>
 <colgroup>
 <col width="8%"></col>
 <col width="12%"></col>
@@ -205,11 +205,118 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
+<p><strong>Table 3:</strong> Test-statistc and corresponding p-value for one-tailed two-sample t-test.</p>
 <p>Since our p-value is less than 0.05 we reject the null hypothesis that the mean scores did not differ in favor of the alternative hypothesis that they did. Thus, we conclude that the students taught under the new curriculum performed better on the test than students taught under the old curriculum.</p>
+<p><br> <br></p>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<p>For code see <a href="#a2">appendix</a></p>
+<blockquote>
+<p>A company is rated as acceptable in quality control if more than 90% of units produced at its facilities are found to be defect-free, and it is rated as excellent in quality control if more than 95% are defect-free. Suppose that a random sample of 500 units is selected and tested for defects, and that 18 units are found to have defects.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Does this data show at the 5% level of significance that the company is acceptable?</li>
+<li>Does it show that the company is excellent? Construct a 95% confidence interval for proportion of defect-free units.</li>
+<li>What sample size should a reliability engineer use to estimate this proportion to within 2% with 95% confidence if it is assumed that the proportion of units that are defect-free is at least 90%?</li>
+</ol>
+</blockquote>
+<p>Estimated proportion defect-free:</p>
+<p><span class="math display">\[ \widehat{p} = \frac{500 - 18}{500} = .964 \rightarrow 96.4\% \]</span> Approximate standard error of the proportion defect free:</p>
+<p><span class="math display">\[ \widehat{\text{SE}}[\widehat{p}] = \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}} = \sqrt{\frac{.964*.036}{500}} \approx 0.00833 \]</span></p>
+<p><br></p>
+<div id="part-a" class="section level3">
+<h3>Part A</h3>
+<p>One-tailed hypothesis test with alpha = 0.05.</p>
+<ul>
+<li>Null hypothesis The proportion of products defect-free is less than or equal to 0.90
+<ul>
+<li><span class="math inline">\(\text{p}_o \leq 0.90\)</span></li>
+</ul></li>
+<li>Alternative hypothesis The proportion of products defect-free is greater than 0.90
+<ul>
+<li><span class="math inline">\(\text{p}_a &gt; 0.90\)</span></li>
+</ul></li>
+</ul>
+<p>In order to test the above null hypothesis we will used a one-tailed Z-test with an alpha level of 0.05. The test statistic is given below:</p>
+<p><span class="math display">\[ \text{Z} = \frac{\widehat{p} - \text{p}_o}{\sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}}} \sim AN(0,1) \]</span></p>
+<p>Since we are doing a one-tailed test with an alpha level of 0.05 we will reject the null hypothesis that the proportion of products defect-free is less than or equal to 0.90 in favor of the alternative that the proportion is greater than 0.90. To do this we used the “t.test()” function in R. Although this function usese a t-distribution, the t-distribution quickly approximates to normal for sample sizes above 30 so since our sample size is 500 this will not be an issue. Table Q2A reports the observed test-statistic and p-value for our test. Since the p-value is less than 0.05 (much less in fact) we reject the null hypothesis and conclude at a 5% level of significance that the company is acceptable (proportion of products defect free is greater than 0.90).</p>
+<table style="width:21%;">
+<colgroup>
+<col width="8%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Z</th>
+<th align="center">P.Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">7.674</td>
+<td align="center">4.406e-14</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q2A:</strong> Test-statistic and corresponding p-value for one-tailed Z-test.</p>
+<p><br> <br></p>
+</div>
+<div id="part-b" class="section level3">
+<h3>Part B</h3>
+<p>One-tailed hypothesis test with alpha = 0.05.</p>
+<ul>
+<li>Null hypothesis The proportion of products defect-free is less than or equal to 0.95
+<ul>
+<li><span class="math inline">\(\text{p_o} \leq 0.95\)</span></li>
+</ul></li>
+<li>Alternative hypothesis The proportion of products defect-free is greater than 0.95
+<ul>
+<li><span class="math inline">\(\text{p_a} &gt; 0.95\)</span></li>
+</ul>
+We will conduct this hypothesis test in just the same way as in part A, except now we will use <span class="math inline">\(\text{p}_o = 0.95\)</span>. Table Q2B reports the observed test-statistic and corresponding p-value. Since the p-value is less than 0.05 we reject the null hypothesis and conclude at a 5% significance level that the company is excellent (proportion of defect-free products is greater than 0.95).</li>
+</ul>
+<table style="width:21%;">
+<colgroup>
+<col width="8%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Z</th>
+<th align="center">P.Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1.679</td>
+<td align="center">0.04691</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q2B:</strong> Test-statistic and corresponding p-value for one-tailed Z-test.</p>
+<p><br> <br></p>
+</div>
+<div id="part-c" class="section level3">
+<h3>Part C</h3>
+<p>We want to determine how large the sample size <em>n</em> must be in order to have an error margin <em>E</em> of 2% (<span class="math inline">\(\pm 2\%\)</span>). Below we show the formula for the sample size <em>n</em> for a desired margin of error:</p>
+<p><span class="math display">\[ n = \text{p}(1- \text{p})*(\frac{Z_{\alpha/2}}{E})^2 \]</span> Since we want a 95% confidence interval <em>Z</em> = 1.96. We already know we want <em>E</em> to be 0.02 and the question says that p is assumed to be 0.90 thus:</p>
+<p><span class="math display">\[ n = 0.9*0.1*(\frac{1.96}{0.02})^2 \approx 864.26 \rightarrow 864 \]</span> So, assuming the proportion of units defect free is at least 90%, if we want to estimate the proportion of products defect free within <span class="math inline">\(\pm 2\%\)</span> with 95% confidence we should have a sample size of 864.</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<p>For code see <a href="#a3">appendix</a></p>
+<blockquote>
+<p>A large corporation requires that its employees attend a 1-day sexual harassment seminar. The Director of Human Resources of this corporation would like to determine whether or not the information presented in this seminar is retained over a long period of time. To this end, a random sample of 40 employees is selected from recently hired employees who are scheduled to take this seminar. Each of the employees in this sample completes a test of knowledge concerning sexual harassment and related legal issues immediately after the seminar, and then takes a similar test 6 months later. The scores are contained in the file “harass.txt”.</p>
+<p>Does that data indicate at the 5% level of significance that the mean score has changed after 6 months? Construct a 95% confidence interval for the difference between the mean scores.</p>
+</blockquote>
+<p><br> <br></p>
 </div>
 </div>
 <div id="appendix" class="section level1">
 <h1>Appendix</h1>
+<p><br></p>
 <div id="a1" class="section level2">
 <h2>A1</h2>
 <pre class="r"><code>q1.data &lt;- data.frame(read.table(&quot;data/DRPscores.txt&quot;, header = F, sep = &quot;&quot;))
@@ -256,6 +363,37 @@ rownames(x) &lt;- NULL
 pandoc.table(x,
              caption = &quot;**Table 3:** Test-statistc and corresponding p-value for one-tailed two-sample t-test.&quot;,
              split.table = Inf)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="a2" class="section level2">
+<h2>A2</h2>
+<pre class="r"><code>### Part A
+
+x &lt;- c(rep(1, 482), rep(0,18))
+results &lt;- t.test(x = x, mu = 0.90, alternative = &quot;g&quot;)
+
+x &lt;- data.frame(&quot;Z&quot; = results$statistic, &quot;P-Value&quot; = results$p.value)
+rownames(x) &lt;- NULL
+
+pandoc.table(x,
+             caption = &quot;**Table Q2A:** Test-statistic and corresponding p-value for one-tailed Z-test.&quot;,
+             split.table = Inf)
+
+### Part B
+
+x &lt;- c(rep(1, 482), rep(0,18))
+results &lt;- t.test(x = x, mu = 0.95, alternative = &quot;g&quot;)
+
+x &lt;- data.frame(&quot;Z&quot; = results$statistic, &quot;P-Value&quot; = results$p.value)
+rownames(x) &lt;- NULL
+
+pandoc.table(x,
+             caption = &quot;**Table Q2B:** Test-statistic and corresponding p-value for one-tailed Z-test.&quot;,
+             split.table = Inf)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="a3" class="section level2">
+<h2>A3</h2>
 </div>
 </div>
 
