@@ -311,6 +311,77 @@ We will conduct this hypothesis test in just the same way as in part A, except n
 <p>A large corporation requires that its employees attend a 1-day sexual harassment seminar. The Director of Human Resources of this corporation would like to determine whether or not the information presented in this seminar is retained over a long period of time. To this end, a random sample of 40 employees is selected from recently hired employees who are scheduled to take this seminar. Each of the employees in this sample completes a test of knowledge concerning sexual harassment and related legal issues immediately after the seminar, and then takes a similar test 6 months later. The scores are contained in the file “harass.txt”.</p>
 <p>Does that data indicate at the 5% level of significance that the mean score has changed after 6 months? Construct a 95% confidence interval for the difference between the mean scores.</p>
 </blockquote>
+<p>We are dealing with paired data here (difference between test score of the same subject at different time points) so we will use a paired t-test. We can do this using the “t.test()” function in R and setting the argument “paired” to <strong>TRUE</strong>, this tell the function that the data is paired. Since the question just asks whether the mean score has changed, and not in what direction it has changed, this will be a two-tailed test. The null hypothesis is that the mean difference between the scores is 0, the alternative hypothesis is that it is not equal to zero. For this test we will use an alpha level of 0.05. However, before doing the test we will check to see if the data are normally distributed using the Shapiro-Wilk test. The null hypothesis is that the data are normally distributed and the alternative hypothesis is that they are not (we will use an alpha level of 0.05). R has a built in function called “shapiro.test()”. Table Q3A shows the results of the Shapiro-Wilk test for the scores from test 1, test 2, and the difference between the scores. Since all the p-values are greater than 0.05 we will accept the assumption that our data are normally distributed.</p>
+<table style="width:57%;">
+<colgroup>
+<col width="44%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Scores from Test 1</strong></td>
+<td align="center">0.1167</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Scores from Test 2</strong></td>
+<td align="center">0.6148</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Difference between Scores</strong></td>
+<td align="center">0.8919</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q3A:</strong> P-values from the Shapiro-Wilk normality test for our data. Since all the p-values are greater than 0.05 we will accept the null hypothesis that our data are normally distributed.</p>
+<p>Table Q3B gives the observed test statistic and p-value for the two sample t-test for the difference between scores. Since the p-value is greater than 0.05 we will accept the null hypothesis and conclude that there is not sufficient evidence to show that the mean score has changed over 6 months.</p>
+<table style="width:47%;">
+<colgroup>
+<col width="11%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"> </th>
+<th align="center">Test Statistic</th>
+<th align="center">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>t</strong></td>
+<td align="center">-1.53</td>
+<td align="center">0.1341</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q3B:</strong> The observed test statistic and p-value for the paired t-test. Since the p-value is greater than 0.05 we cannot conclude that the mean scores changed.</p>
+<p>We can also use the output from the t.test function to give us a 95% confidence for the difference between the mean scores. Table Q3C reports this confidence interval. As we can see the confidence interval includes zero, once again indicating that there is insufficient evidence of a change in the mean scores.</p>
+<table style="width:39%;">
+<colgroup>
+<col width="19%"></col>
+<col width="19%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Lower Bound</th>
+<th align="center">Upper Bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">-12.65</td>
+<td align="center">1.755</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q3C:</strong> 95% confidence interval for the difference between the mean scores. Notice that the confidence interval includes 0, indicating that there is no significant evidence of a difference between the mean scores.</p>
 <p><br> <br></p>
 </div>
 </div>
@@ -394,6 +465,45 @@ pandoc.table(x,
 </div>
 <div id="a3" class="section level2">
 <h2>A3</h2>
+<pre class="r"><code># Load data set
+
+q3.data &lt;- data.frame(read.table(&quot;data/harass.txt&quot;, header = T, sep = &quot;&quot;))
+
+## Normality tests
+
+x &lt;- data.frame(&quot;P.value&quot; = c(shapiro.test(q3.data$Test1)$p.value,
+                              shapiro.test(q3.data$Test2)$p.value,
+                              shapiro.test(q3.data$Test1 - q3.data$Test2)$p.value))
+colnames(x) &lt;- &quot;P-Value&quot;
+rownames(x) &lt;- c(&quot;Scores from Test 1&quot;, &quot;Scores from Test 2&quot;, &quot;Difference between Scores&quot;)
+
+pandoc.table(x,
+             caption = &quot;**Table Q3A:** P-values from the Shapiro-Wilk normality test for our data. Since all the p-values are greater than 0.05 we will accept the null hypothesis that our data are normally distributed.&quot;,
+             split.table = Inf)
+
+## Hypothesis test for difference between mean scores
+
+results &lt;- t.test(q3.data$Test2, q3.data$Test1, paired = T)
+
+x &lt;- data.frame(&quot;S&quot; = results$statistic, &quot;P&quot; = results$p.value)
+colnames(x) &lt;- c(&quot;Test Statistic&quot;, &quot;P-Value&quot;)
+
+pandoc.table(x,
+             caption = &quot;**Table Q3B:** The observed test statistic and p-value for the paired t-test. Since the p-value is greater than 0.05 we cannot conclude that the mean scores changed.&quot;,
+             split.table = Inf)
+
+## Confidence Interval
+
+x &lt;- data.frame(&quot;LB&quot; = results$conf.int[1], &quot;UB&quot; = results$conf.int[2])
+colnames(x) &lt;- c(&quot;Lower Bound&quot;, &quot;Upper Bound&quot;)
+
+pandoc.table(x,
+             caption = &quot;**Table Q3C:** 95% confidence interval for the difference between the mean scores. Notice that the confidence interval includes 0, indicating that there is no significant evidence of a difference between the mean scores.&quot;,
+             split.table = Inf)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="a4" class="section level2">
+<h2>A4</h2>
 </div>
 </div>
 
