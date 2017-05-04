@@ -7,6 +7,8 @@ output: html_document
 
 # Answers
 
+<br>
+
 ## Question 1
 
   For code see [appendix](#a1).
@@ -35,6 +37,7 @@ Nt.t <- shapiro.test(q1.data.treat$Score)
 
 ```{r, echo =F, results = "asis"}
 library(pander)
+panderOptions("table.caption.prefix", "")
 
 x <- data.frame(Group = c("Treatment", "Control"), "P-Value" = c(Nt.t$p.value, Nt.c$p.value) )
 
@@ -95,16 +98,140 @@ pandoc.table(x,
 
   Since our p-value is less than 0.05 we reject the null hypothesis that the mean scores did not differ in favor of the alternative hypothesis that they did. Thus, we conclude that the students taught under the new curriculum performed better on the test than students taught under the old curriculum.
 
+<br>
+<br>
+
+## Question 2
+
+  For code see [appendix](#a2)
+
+> A company is rated as acceptable in quality control if more than 90% of units produced at
+its facilities are found to be defect-free, and it is rated as excellent in quality control if
+more than 95% are defect-free. Suppose that a random sample of 500 units is selected and
+tested for defects, and that 18 units are found to have defects.
+>
+>a. Does this data show at the 5% level of significance that the company is acceptable?
+>b. Does it show that the company is excellent? Construct a 95% confidence interval for
+proportion of defect-free units.
+>c. What sample size should a reliability engineer use to estimate this proportion to within
+2% with 95% confidence if it is assumed that the proportion of units that are defect-free
+is at least 90%?
+
+  Estimated proportion defect-free:
+  
+  $$ \widehat{p} = \frac{500 - 18}{500} = .964 \rightarrow 96.4\% $$
+  Approximate standard error of the proportion defect free:
+  
+  $$ \widehat{\text{SE}}[\widehat{p}] = \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}} = \sqrt{\frac{.964*.036}{500}} \approx 0.00833 $$
+
+<br>
+
+### Part A
+
+  One-tailed hypothesis test with alpha = 0.05.
+
+* Null hypothesis The proportion of products defect-free is less than or equal to 0.90
+    + $\text{p}_o \leq 0.90$
+* Alternative hypothesis The proportion of products defect-free is greater than 0.90
+    + $\text{p}_a > 0.90$
+
+In order to test the above null hypothesis we will used a one-tailed Z-test with an alpha level of 0.05. The test statistic is given below:
+
+  $$ \text{Z} = \frac{\widehat{p} - \text{p}_o}{\sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}}} \sim AN(0,1) $$
+
+Since we are doing a one-tailed test with an alpha level of 0.05 we will reject the null hypothesis that the proportion of products defect-free is less than or equal to 0.90 in favor of the alternative that the proportion is greater than 0.90. To do this we used the "t.test()" function in R. Although this function usese a t-distribution, the t-distribution quickly approximates to normal for sample sizes above 30 so since our sample size is 500 this will not be an issue. Table Q2A reports the observed test-statistic and p-value for our test. Since the p-value is less than 0.05 (much less in fact) we reject the null hypothesis and conclude at a 5% level of significance that the company is acceptable (proportion of products defect free is greater than 0.90).
+
+```{r, echo=F, results="asis"}
+
+x <- c(rep(1, 482), rep(0,18))
+results <- t.test(x = x, mu = 0.90, alternative = "g")
+
+x <- data.frame("Z" = results$statistic, "P-Value" = results$p.value)
+rownames(x) <- NULL
+
+pandoc.table(x,
+             caption = "**Table Q2A:** Test-statistic and corresponding p-value for one-tailed Z-test.",
+             split.table = Inf)
+
+```
 
 
 
+<br>
+<br>
+
+### Part B
+
+  One-tailed hypothesis test with alpha = 0.05.
+
+* Null hypothesis The proportion of products defect-free is less than or equal to 0.95
+    + $\text{p_o} \leq 0.95$
+* Alternative hypothesis The proportion of products defect-free is greater than 0.95
+    + $\text{p_a} > 0.95$
+    
+    We will conduct this hypothesis test in just the same way as in part A, except now we will use $\text{p}_o = 0.95$. Table Q2B reports the observed test-statistic and corresponding p-value. Since the p-value is less than 0.05 we reject the null hypothesis and conclude at a 5% significance level that the company is excellent (proportion of defect-free products is greater than 0.95).
+
+```{r, echo=F, results="asis"}
+
+x <- c(rep(1, 482), rep(0,18))
+results <- t.test(x = x, mu = 0.95, alternative = "g")
+
+x <- data.frame("Z" = results$statistic, "P-Value" = results$p.value)
+rownames(x) <- NULL
+
+pandoc.table(x,
+             caption = "**Table Q2B:** Test-statistic and corresponding p-value for one-tailed Z-test.",
+             split.table = Inf)
+
+```
+
+<br>
+<br>
+
+### Part C
+
+  We want to determine how large the sample size *n* must be in order to have an error margin *E* of 2% ($\pm 2\%$). Below we show the formula for the sample size *n* for a desired margin of error:
+  
+  $$ n = \text{p}(1- \text{p})*(\frac{Z_{\alpha/2}}{E})^2 $$
+  Since we want a 95% confidence interval *Z* = 1.96. We already know we want *E* to be 0.02 and the question says that p is assumed to be 0.90 thus:
+
+$$ n = 0.9*0.1*(\frac{1.96}{0.02})^2 \approx 864.26 \rightarrow 864 $$
+  So, assuming the proportion of units defect free is at least 90%, if we want to estimate the proportion of products defect free within $\pm 2\%$ with 95% confidence we should have a sample size of 864.
+
+<br>
+<br>
+
+## Question 3
+
+  For code see [appendix](#a3)
+
+> A large corporation requires that its employees attend a 1-day sexual harassment seminar.
+The Director of Human Resources of this corporation would like to determine whether or
+not the information presented in this seminar is retained over a long period of time. To
+this end, a random sample of 40 employees is selected from recently hired employees
+who are scheduled to take this seminar. Each of the employees in this sample completes a
+test of knowledge concerning sexual harassment and related legal issues immediately
+after the seminar, and then takes a similar test 6 months later. The scores are contained in
+the file “harass.txt”.
+>
+>Does that data indicate at the 5% level of significance that the mean score has changed
+after 6 months? Construct a 95% confidence interval for the difference between the
+mean scores.
+  
+
+
+
+
+<br>
+<br>
 
 # Appendix
+
+<br>
 
 ## A1
 
 ```{r, eval=F}
-
 q1.data <- data.frame(read.table("data/DRPscores.txt", header = F, sep = ""))
 colnames(q1.data) <- c("Group", "Score")
 q1.data.treat <- q1.data[q1.data$Group == "Treat",]
@@ -149,8 +276,40 @@ rownames(x) <- NULL
 pandoc.table(x,
              caption = "**Table 3:** Test-statistc and corresponding p-value for one-tailed two-sample t-test.",
              split.table = Inf)
-
 ```
 
+<br>
+<br>
 
+## A2
 
+```{r, eval=F}
+### Part A
+
+x <- c(rep(1, 482), rep(0,18))
+results <- t.test(x = x, mu = 0.90, alternative = "g")
+
+x <- data.frame("Z" = results$statistic, "P-Value" = results$p.value)
+rownames(x) <- NULL
+
+pandoc.table(x,
+             caption = "**Table Q2A:** Test-statistic and corresponding p-value for one-tailed Z-test.",
+             split.table = Inf)
+
+### Part B
+
+x <- c(rep(1, 482), rep(0,18))
+results <- t.test(x = x, mu = 0.95, alternative = "g")
+
+x <- data.frame("Z" = results$statistic, "P-Value" = results$p.value)
+rownames(x) <- NULL
+
+pandoc.table(x,
+             caption = "**Table Q2B:** Test-statistic and corresponding p-value for one-tailed Z-test.",
+             split.table = Inf)
+```
+
+<br>
+<br>
+
+## A3
