@@ -322,10 +322,10 @@ hours?
 
 One-tailed hypothesis test with alpha = 0.1.
 
-* Null hypothesis The proportion of products defect-free is less than or equal to 0.90
-    + $\mu_o \geq 24$
-* Alternative hypothesis The proportion of products defect-free is greater than 0.90
-    + $\mu_a < 24$
+* Null hypothesis: The mean resolution time is greater than or equal to 24 hours
+    + $\mu_o \geq 24 \rightarrow \widehat{\mu} - \mu_o \geq 0$
+* Alternative hypothesis: The mean resolution time is less than 24 hours
+    + $\mu_a < 24 \rightarrow \widehat{\mu} - \mu_o < 0$
 
 In order to test the above null hypothesis we will used a one-tailed Z-test with an alpha level of 0.05. The test statistic is given below:
 
@@ -391,13 +391,85 @@ $$ n = (\frac{1.64 * 10}{0.5})^2 = 1075.84 \rightarrow 1076 $$
 
 ## Question 5
 
+  For code see appendix [A5](#a5)
+
+> A study of industries in North Texas compared the experience of entry-level managers in
+telecommunication companies with the experience of entry-level managers in software services
+companies. Suppose that a random sample of size 20 entry-level managers was
+selected separately from each group of companies and the experience of each manager
+was obtained. The data summary are:
+>
+>     Telecom (Sample 1):   mean = 4.7,   standard deviation = 1.75
+>     Software (Sample 2):  mean = 6.0,   standard deviation = 0.75
+>
+> a. Does this data show that there is a difference at the 5% level of significance?
+> b. Construct a 90% confidence interval for the difference between the means.
+
+<br>
+<br>
+
+### Part A
+
+Two-tailed hypothesis test with alpha = 0.05.
+
+* Null hypothesis: There is no difference between telecommunication companies and sofware companies in the mean experience of entry-level managers.
+    + $\text{D}_o = \mu_1 - \mu_2 = 0$
+* Alternative hypothesis: The mean resolution time is less than 24 hours
+    + $\text{D}_a = \mu_1 - \mu_2 \neq 0$
+
+In order to test the above null hypothesis we will used a two-tailed t-test (sample sizes are less than 0.05) with an alpha level of 0.05. The test statistic is given below:
+
+$$ \text{T} = \frac{(\widehat{\mu}_1 - \widehat{\mu}_2) - \text{D}_o} {\sqrt{ \frac{S^2_p}{n} + \frac{S^2_p}{n} }} \sim t_{n_1 + n_2 - 2} \\ \text{where: } \space \space \space S^2_p = \frac{ (n_1 - 1)S_1^2 + (n_2 - 1)S_2^2 }  {n_1 + n_2 - 2} $$
+
+  Since we are doing a two-tailed test, we will reject the null hypothesis if the probability of observing a test statistic greater than or equal to the absolute value of our test statistic is less than 0.05.
 
 
+So under our conditions our test statistic is:
+
+$$ \text{T} = \frac{(4.7 - 6.0) - 0} {\sqrt{ \frac{S^2_p}{20} + \frac{S^2_p}{20} }} \sim t_{38} \\ \text{where: } \space \space \space S^2_p = \frac{ (19)1.75^2 + (19)0.75^2 }  {38} = \frac{1.75^2 + 0.75^2}{2} = \frac{3.625}{2} \\ \text{which gives: } \space \space \space \text{T} = \frac{-2.6} {\sqrt{ \frac{3.625}{5} }} \approx -3.054 $$
+
+  Using the "pt()" function in R we find that the probability of observing a test statisitic with an absolute value this large or larger under the null hypothesis is less than 0.05. Table Q5A reports the test statistic and p-value. Since the p-value is less than 0.05 we reject the null hypothesis and conclude at a 5% level of significance that the mean experience of entry-level managers is not the same between telecommunications companies and software services companies.
+
+***
+
+```{r, echo=F, results="asis"}
+
+x <- data.frame("T" = -3.054, "DF" = 38, "P-Value" = pt(3.054, df = 38, lower.tail = F))
+colnames(x) <- c("Test Statistic", "Degrees of Freedom",  "P-value")
+
+pandoc.table(x,
+             caption = "**Table Q5A:** Observed test-statistic and corresponding p-value for two-tailed t-test.",
+             split.table = Inf)
 
 
+```
+
+***
 
 
+<br>
+<br>
 
+### Part B
+
+  The formula for the confidence interval for the difference between the means is:
+
+$$ (1 - \alpha)\% \space \text{CI [D]} = \widehat{\text{D}} \pm t_{\alpha/2, \space df}*\sqrt{ \frac{S^2_p}{n_1} + \frac{S^2_p}{n_2} }$$
+
+```{r, include=F}
+t <- qt(0.95, 38)
+```
+
+  We have 38 degrees of freedom and we want a 90% confidence interval, so using the "qt()" function in R we find that our  $t_{.05, \space 38} = 1.69$. Also our sample sizes are the same so our 90% confidence interval is:
+  
+  $$ 90\% \space \text{CI [D]} = -1.3 \pm 1.69*\sqrt{\frac{3.625}{20}} \approx (-2.02, -0.581)$$
+
+  Thus we are 90% confident that the the difference between the mean experiance entry-level telecommunication managers and entry-level software managers is between -2.02 and 0.581.
+
+<br>
+<br>
+
+## Question 6
 
 <br>
 <br>
@@ -546,3 +618,21 @@ z <- qnorm(0.95)
 <br>
 
 ## A5
+
+```{r, eval=F}
+## Part A
+x <- data.frame("T" = -3.054, "DF" = 38, "P-Value" = pt(3.054, df = 38, lower.tail = F))
+colnames(x) <- c("Test Statistic", "Degrees of Freedom",  "P-value")
+
+pandoc.table(x,
+             caption = "**Table Q5A:** Observed test-statistic and corresponding p-value for two-tailed t-test.",
+             split.table = Inf)
+
+## Part B
+t <- qt(0.95, 38)
+```
+
+<br>
+<br>
+
+## A6
