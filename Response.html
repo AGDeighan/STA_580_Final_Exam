@@ -690,8 +690,8 @@ q6data &lt;- data.frame(read.table(&quot;data/Pilot.txt&quot;, header = T, sep =
 <p>The p-value for the observed test statistic is much lower than our alpha level so we must reject our null hypothesis. We conclude that there is a difference in the mean change in satisfaction scores (e.g. <em>SatisImprov</em>) between the two factories.</p>
 <p><br> <br></p>
 </div>
-<div id="i-1" class="section level4">
-<h4>I</h4>
+<div id="ii" class="section level4">
+<h4>II</h4>
 <p>The formula for constructing a 95% confidence interval for the mean <em>SatisImprov</em> (change in satisfaction scores, <span class="math inline">\(\mu_c\)</span>) at the factory is given below:</p>
 <p><span class="math display">\[ 95\% \text{ CI}[\mu_c] = \overline{SatisImprov} \space \pm t_{29, \space (1 - 0.025)} * \sqrt{\frac{s^2}{29}}\]</span></p>
 <p>We can use the R function “t.test()” to aquire this confidence interval. The interval is reported in table Q6B.3.</p>
@@ -721,9 +721,179 @@ q6data &lt;- data.frame(read.table(&quot;data/Pilot.txt&quot;, header = T, sep =
 <hr />
 <p><br></p>
 <p>We are 95% confident that the interval 2.369 - 5.898 includes the mean <em>SatisImprov</em> (change in satisfaction score) at the pilot factory.</p>
-<p><br> <br> <br></p>
+<p><br> <br></p>
 </div>
 </div>
+</div>
+<div id="question-7" class="section level2">
+<h2>Question 7</h2>
+<p>For full code see appendix <a href="#a7">A7</a></p>
+<blockquote>
+<p>To develop which muscles need to be subjected to conditioning program in order to improve one’s performance on the flat serve used in tennis, the study “An Electromyographic -Cinematrographic Analysis of the Tennis Serve” was conducted by the Department of Health, Physical Education and Recreation at the Virginia Polytechnic Institute and State University in 1978. Five different muscles 1: anterior deltoid 2: pectorial major 3: posterior deltoid 4: middle deltoid 5: triceps were tested on each of three subjects, and the experiment was carried out three times for each treatment combination. The electrographic data, recorded during the serve, are given in the following table. Data file “electromyographic.txt”.</p>
+</blockquote>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+
+</div>
+<blockquote>
+<p>Use alpha = 0.01 level of significance to test the hypothesis that</p>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Different subjects have equal electromyographic measurements.</li>
+<li>Different muscles have no effect on electromyographic measurements.</li>
+<li>Subjects and type of muscle do not interact.</li>
+</ol>
+</blockquote>
+</blockquote>
+<pre class="r"><code>## Import Data
+q7data &lt;- data.frame(read.table(&quot;data/electromyographic.txt&quot;, header = T, sep = &quot;&quot;))</code></pre>
+<p><br></p>
+<div id="part-a-4" class="section level3">
+<h3>Part A</h3>
+<p>We will perform a two-way anova to see if subjects have different electromyographic measurements when controlling for muscle type. We will use an alpha level of 0.01 for this test. The null hypothesis of this test is that all the subjects have equal electromyographic measurements. The alternative hypothesis is that at least one of the subjects has different electromyographic measurements. We will use the “aov()” function in R to perform this test. See below:</p>
+<pre class="r"><code>s &lt;- aov(electromyographic ~ Subject + Muscle, data = q7data)
+summary(s)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## Subject      1   3730    3730   7.269 0.0101 *
+## Muscle       1    540     540   1.053 0.3107  
+## Residuals   42  21550     513                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p>From the above summary output we can see that the F-test statistic for a difference between subjects is 7.269. The p-value for this statistic is 0.0101, this p-value is greater than our alpha level of 0.01. Even though the p-value is only <em>slightly</em> greater than the alpha level we still fail to reject the null hypothesis at a significance level of 1%. Thus we cautiously conclude that there is no evidence of a difference in electromyographic measurements between subjects.</p>
+<p><br> <br></p>
+</div>
+<div id="part-b-4" class="section level3">
+<h3>Part B</h3>
+<p>We will perform a two-way anova to see if different muscle have any effect on electromyographic measurements when controlling for subject. The null hypothesis for this test is that none of the muscle type have any effect on electromyographic measurements. The alternative hypothesis is that at least one muscle type has an effect on the electromyographic measurements. We will perform this test at an alpha level of 0.01. Again, we will use the R funtion “aov()” to perform this test. See below:</p>
+<pre class="r"><code>m &lt;- aov(electromyographic ~ Muscle + Subject, data = q7data)
+summary(m)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## Muscle       1    540     540   1.053 0.3107  
+## Subject      1   3730    3730   7.269 0.0101 *
+## Residuals   42  21550     513                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p>The observed F test statistic is 1.053. The probability (p-value) of observing a test-statistic this large or larger under the null hypothesis is 0.3107. Since this is larger than our alpha level we fail to reject the null hypothesis. We conclude that there is no significant evidence of an effect of muscle type on electromyographic measurements.</p>
+<p><br> <br></p>
+</div>
+<div id="part-c-2" class="section level3">
+<h3>Part C</h3>
+<p>To test whether subject and muscle type interact we will perform a two-way anova including an interaction term between muscle type and subject. The null hypothesis for this test is that there is no interaction effect between muscle type and any subject on electromyographic reading. The alternative hypothesis is that at there is an effect from the interaction of at least one significant interaction effect between muscle and subject. We will use an alpha level of 0.01 for this test. We will use the R function “aov()” to perform this test. See below:</p>
+<pre class="r"><code>ms &lt;- aov(electromyographic ~ Subject + Muscle + Subject:Muscle, data = q7data)
+summary(ms)</code></pre>
+<pre><code>##                Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+## Subject         1   3730    3730   7.795 0.00792 **
+## Muscle          1    540     540   1.129 0.29420   
+## Subject:Muscle  1   1932    1932   4.038 0.05109 . 
+## Residuals      41  19618     478                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p>The observed F test statistic for the interaction between subject and muscle is 4.038. The probability (p-value) of observing a test statistic this large or larger under the null hypothesis is 0.05109. Since this p-value is larger than our alpha level we fail to reject the null hypothesis at a significance level of 1%. We conclude that there is no evidence that subjects and muscles have an interaction effect on electromyographic measurements.</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="queation-8" class="section level2">
+<h2>Queation 8</h2>
+<p>For full code see appendix <a href="#a8">A8</a></p>
+<blockquote>
+<p>(only for graduate students) A quality control engineer studied the relationship between years of experience of a system control engineer on the capacity of the engineer to complete within a given time a complex control design including the debugging of all computer programs and control devices. A group of 25 engineers having a wide difference in experience (measured in months of experience) were given the same control design project. The results of the study are given in the following table with y = 1 if the project was successfully completed in the allocated time and y = 0 if the project was not successfully completed. Data file “ExperienceCompetingTask.txt”.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Determine whether experience is associated with the probability of completing the task.</li>
+<li>Compute the probability of successfully completing the task for an engineer having 24 months of experience. Place a 95% confidence interval on your estimate.</li>
+</ol>
+</blockquote>
+<pre class="r"><code>## Import Data
+q8data &lt;- data.frame(read.table(&quot;data/ExperienceCompetingTask.txt&quot;, header = T, sep = &quot;&quot;))</code></pre>
+<p><br></p>
+<div id="part-a-5" class="section level3">
+<h3>Part A</h3>
+<p>For all following tests, the alpha level is taken to be 0.05.</p>
+<p>To determine whether experience is associate with the probability of completing a task, I will use the data to fit a logistic regression model such that:</p>
+<p><span class="math display">\[ logit(\widehat{\pi}_c) = ln(\frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c}) = \widehat{\beta}_0 + \widehat{\beta}_1*m \]</span> Where <span class="math inline">\(\widehat{\pi}_c\)</span> is the predicted probability of completing a task, <span class="math inline">\(\frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c}\)</span> is the odds of completing a task, and <span class="math inline">\(m\)</span> is the months of experience. <span class="math inline">\(\beta_1\)</span> is the slope parameter which describes the relationship between the months of experience an engineer has and their odds of success. Our null hypothesis is that there is no association between months of experience and odds of completing a task (<span class="math inline">\(\beta_1 = 0\)</span>). Our alternative hypothesis is that there is an associtation between months of experiance and odds of completing a task (<span class="math inline">\(\beta_1 \neq 0\)</span>). Due to the definition of odds, an association between odds of completing a task and months of experience means there is an association between probability of completing a task and months of experience. Thus, if we reject our null hypothesis we will conclude that there is an association between months of experience and probability of completing a task. We will use the R function “glm()” to fit the above model. We can use the “summary()” function to find the p-value of the fitted slope coefficient for <em>MonthsofExperience</em>. See below:</p>
+<pre class="r"><code>fit &lt;- glm(CompletingtheTask ~ MonthsofExperience, data = q8data, family = &quot;binomial&quot;)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = CompletingtheTask ~ MonthsofExperience, family = &quot;binomial&quot;, 
+##     data = q8data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0184  -0.9317   0.4726   0.9415   1.4985  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)        -1.68420    0.94508  -1.782   0.0747 .
+## MonthsofExperience  0.11938    0.05889   2.027   0.0427 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 34.617  on 24  degrees of freedom
+## Residual deviance: 29.374  on 23  degrees of freedom
+## AIC: 33.374
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>The p-value of the slope parameter for <em>MonthsofExperience</em> is 0.0427. This is less than the alpha level 0.05 so we reject the null hypothesis that there is no association between months of experience and probability of completing a task and conclude that there is an association between the two.</p>
+<p><br> <br></p>
+</div>
+<div id="part-b-5" class="section level3">
+<h3>Part B</h3>
+<p>Now we will compute the <em>expected</em> mean probability of successfully completing a task for an engineer with 24 months of experience. Recall our model gives the expected mean <em>log odds</em>. We want the expected mean <em>probability</em>. Thus we will have to re-arrange the formula:</p>
+<p><span class="math display">\[ logit(\widehat{\pi}_c) = ln(\frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c}) = \widehat{\beta}_0 + \widehat{\beta}_1*m \]</span></p>
+<p><span class="math display">\[ \frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c} =  e^{\widehat{\beta}_0 + \widehat{\beta}_1*m } \]</span> <span class="math display">\[\widehat{\pi}_c = \frac{e^{\widehat{\beta}_0 + \widehat{\beta}_1*m }}{1 + e^{\widehat{\beta}_0 + \widehat{\beta}_1*m }}\]</span></p>
+<p>Using the “predict()” function in R, we can use the logistic model object “fit” that we created with R in part A to find the fitted <span class="math inline">\(logit(\widehat{\pi}_c)\)</span> for 24 months of experience. Then use the formula above to calculate the expected probability. See below:</p>
+<pre class="r"><code>val &lt;- predict(fit, newdata = data.frame(MonthsofExperience = 24))
+val.p &lt;- exp(val)/(1 + exp(val) )
+val.p</code></pre>
+<pre><code>##         1 
+## 0.7651155</code></pre>
+<p>So the estimated expected mean probability of successfully completing a task for an engineer with 24 months of experience is ~0.765. In order to construct a 95% confidence interval we need to estimate the standard error of the estimate. This is hard to do directly for the probability. Instead we will do it for the log-odds, find the 95% confidence bound for the expected log-odds and then convert this to probability. The formula for the standard error of the expected log-odds of successfully completing a task is shown below:</p>
+<p><span class="math display">\[ \widehat{SE}[logit(\widehat{\pi}_c)] = \sqrt{\widehat{V}[\widehat{\beta}_0] + \widehat{V}[\widehat{\beta}_1] + 2 * \widehat{Cov}[\widehat{\beta}_0, \space \widehat{\beta}_1]} \]</span> <br></p>
+<p>We can find estimates of the above variances and covariances from the summary object of the logistic model object “fit” that we previously created. See below:</p>
+<pre class="r"><code>s.fit &lt;- summary(fit)
+s.fit$cov.unscaled</code></pre>
+<pre><code>##                    (Intercept) MonthsofExperience
+## (Intercept)         0.89317648       -0.049067477
+## MonthsofExperience -0.04906748        0.003468527</code></pre>
+<p>From the output above we can see that <span class="math inline">\(\widehat{V}[\widehat{\beta}_0] = 0.89317648\)</span>, <span class="math inline">\(\widehat{V}[\widehat{\beta}_1] = 0.003468527\)</span>, and <span class="math inline">\(\widehat{Cov}[\widehat{\beta}_0, \space \widehat{\beta}_1] = -0.049067477\)</span>. Thus our estimated standard error is:</p>
+<p><span class="math display">\[ \widehat{SE}[logit(\widehat{\pi}_c)] = \sqrt{0.89317648 +  0.003468527 - 2 * 0.049067477} = 0.892990208 \]</span></p>
+<p>The expected mean log-odds of successfully completing a task for an engineer with 24 months of experiance is:</p>
+<pre class="r"><code>val</code></pre>
+<pre><code>##        1 
+## 1.180933</code></pre>
+<pre class="r"><code>qt(0.975, 23)</code></pre>
+<pre><code>## [1] 2.068658</code></pre>
+<p>We will use this estimated log-odds value and the estimated standard error above to construct the 95% confidence interval for expected mean log-odds of successfully completing a task. Since our sample size is 25 and our model has two parameters we will need to use a t-distribution with 23 degrees of freedom to calculate the critical value <span class="math inline">\(t_{23, \space (1 - 0.05/2)} = t_{23, \space 0.975} = 2.068658\)</span>. Thus our 95% confidence interval is:</p>
+<p><span class="math display">\[ 95\%\text{ CI}[logit(\pi_c)] = 1.180933 \pm 2.068658*0.892990208 = (-0.037961338, \space 3.656621338) \]</span> Now if we convert this to probability form, our 95% confidence interval for the mean probability of success of completing a task for an engineer with 24 months of experience is:</p>
+<p><span class="math display">\[ 95\%\text{ CI}[\pi_c] =  (\frac{e^{-0.037961338}}{1 + e^{-0.037961338}}, \space \frac{e^{3.656621338}}{1 + e^{3.656621338}}) \approx (0.491, \space 0.975 ) \]</span> Thus we are 95% confident that the interval 0.491 - 0.975 includes the mean probability of success of completing a task for an engineer with 24 months of experience.</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="question-9" class="section level2">
+<h2>Question 9</h2>
+<p>For full code see appendix <a href="#a9">A9</a></p>
+<blockquote>
+<p>(only for graduate students) Geriatric study. A researcher in geriatrics designed a prospective study to investigate the effects of two interventions on the frequency of falls. One hundred subjects were randomly assigned to one of the two interventions: education only (X1 = 0) and education plus aerobic exercise training (X1 =1) . Subjects were at least 65 years of age and in reasonably good health. Three variables considered to be important as control variables were gender (X2 : 0 = female ; 1 = male) , a balance index (X3) , and a strength index (X4 ) . The higher the balance index, the more stable is the subject: and the higher the strength index, the stronger is the subject. The subject kept a diary recording the number of falls (Y ) during the six months of the study. The data are given in the following table. Data file “GeriatricStudy.txt”.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Fit the Poisson regression model with the response function</li>
+</ol>
+</blockquote>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+
+</div>
+<blockquote>
+<p>State the estimated regression coefficients, their estimated standard deviations. and the estimated response function.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Obtain the deviance residuals and present them in an index plot. Do there appear to be any outlying cases?</li>
+<li>Assuming that the fitted model is appropriate, use the likelihood ratio test to determine whether gender (X2 ) can be dropped from the model: control a at 0.05. State the full and reduced models, decision rule, and conclusion. What is the P-value of the test?</li>
+<li>For the fitted model containing only X1, X3 and X4 in first-order terms, obtain an approximate 95% confidence interval for b1. Interpret your confidence interval. Does aerobic exercise reduce the frequency of falls when controlling for balance and strength?</li>
+<li>Fit the four-simple Poisson regression models with one independent variable, one X , at a time. Interpret the results.</li>
+</ol>
+</blockquote>
+<p><br> <br></p>
 </div>
 </div>
 <div id="appendix" class="section level1">
@@ -868,6 +1038,225 @@ t &lt;- qt(0.95, 38)</code></pre>
 </div>
 <div id="a6" class="section level2">
 <h2>A6</h2>
+<pre class="r"><code>## Import Data
+q6data &lt;- data.frame(read.table(&quot;data/Pilot.txt&quot;, header = T, sep = &quot;&quot;))
+
+####################################################
+
+## Part A
+x &lt;- data.frame(ts = c(shapiro.test(q6data$Before[q6data$Factory==&quot;Pilot&quot;])$statistic, 
+                       shapiro.test(q6data$Before[q6data$Factory==&quot;NonPilot&quot;])$statistic),
+                p = c(shapiro.test(q6data$Before[q6data$Factory==&quot;Pilot&quot;])$p.value, 
+                       shapiro.test(q6data$Before[q6data$Factory==&quot;NonPilot&quot;])$p.value))
+
+colnames(x) &lt;- c(&quot;Test Statistic&quot;, &quot;P-value&quot;)
+rownames(x) &lt;- c(&quot;Pilot Factory&quot;, &quot;Non-Pilot Factory&quot;)
+
+pandoc.table(x,
+             caption = &quot;**Table Q6A.1:** Results of Shapiro-Wilk normality test of satisfaction scores of each factory before the program.&quot;,
+             split.table = Inf)</code></pre>
+<pre><code>## 
+## --------------------------------------------------
+##         &amp;nbsp;           Test Statistic   P-value 
+## ----------------------- ---------------- ---------
+##    **Pilot Factory**         0.9515       0.1854  
+## 
+##  **Non-Pilot Factory**       0.985        0.9377  
+## --------------------------------------------------
+## 
+## **Table Q6A.1:** Results of Shapiro-Wilk normality test of satisfaction scores of each factory before the program.</code></pre>
+<pre class="r"><code>####################################################
+
+x &lt;- data.frame(ts = c(t.test(q6data$Before[q6data$Factory==&quot;Pilot&quot;], q6data$Before[q6data$Factory==&quot;NonPilot&quot;])$statistic),
+                p = c(t.test(q6data$Before[q6data$Factory==&quot;Pilot&quot;], q6data$Before[q6data$Factory==&quot;NonPilot&quot;])$p.value)
+                )
+
+colnames(x) &lt;- c(&quot;Test Statistic&quot;, &quot;P-value&quot;)
+rownames(x) &lt;- c(NULL)
+
+pandoc.table(x,
+             caption = &quot;**Table Q6A.2:** Results of t-test for a difference in the mean before-program satisfaction scores between the factories.&quot;,
+             split.table = Inf)</code></pre>
+<pre><code>## 
+## --------------------------
+##  Test Statistic   P-value 
+## ---------------- ---------
+##     -0.0376       0.9701  
+## --------------------------
+## 
+## **Table Q6A.2:** Results of t-test for a difference in the mean before-program satisfaction scores between the factories.</code></pre>
+<pre class="r"><code>####################################################
+
+## Part B
+q6data[, &quot;SatisImprov&quot;] &lt;- q6data$After - q6data$Before
+
+####################################################
+
+## Part B.I
+x &lt;- data.frame(ts = c(shapiro.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;])$statistic, 
+                       shapiro.test(q6data$SatisImprov[q6data$Factory==&quot;NonPilot&quot;])$statistic),
+                p = c(shapiro.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;])$p.value, 
+                       shapiro.test(q6data$SatisImprov[q6data$Factory==&quot;NonPilot&quot;])$p.value))
+
+colnames(x) &lt;- c(&quot;Test Statistic&quot;, &quot;P-value&quot;)
+rownames(x) &lt;- c(&quot;Pilot Factory&quot;, &quot;Non-Pilot Factory&quot;)
+
+pandoc.table(x,
+             caption = &quot;**Table Q6B.3:** Results of Shapiro-Wilk normality test of change in satisfaction scores at each factory.&quot;,
+             split.table = Inf)</code></pre>
+<pre><code>## 
+## --------------------------------------------------
+##         &amp;nbsp;           Test Statistic   P-value 
+## ----------------------- ---------------- ---------
+##    **Pilot Factory**         0.9464        0.135  
+## 
+##  **Non-Pilot Factory**       0.8587      0.0009496
+## --------------------------------------------------
+## 
+## **Table Q6B.3:** Results of Shapiro-Wilk normality test of change in satisfaction scores at each factory.</code></pre>
+<pre class="r"><code>####################################################
+
+x &lt;- data.frame(ts = c(t.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;], q6data$SatisImprov[q6data$Factory==&quot;NonPilot&quot;])$statistic),
+                p = c(t.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;], q6data$SatisImprov[q6data$Factory==&quot;NonPilot&quot;])$p.value)
+                )
+
+colnames(x) &lt;- c(&quot;Test Statistic&quot;, &quot;P-value&quot;)
+rownames(x) &lt;- c(NULL)
+
+pandoc.table(x,
+             caption = &quot;**Table Q6B.2:** Results of t-test for a difference in the mean *change* satisfaction scores between the two factories.&quot;,
+             split.table = Inf)</code></pre>
+<pre><code>## 
+## --------------------------
+##  Test Statistic   P-value 
+## ---------------- ---------
+##      3.978       0.0002182
+## --------------------------
+## 
+## **Table Q6B.2:** Results of t-test for a difference in the mean *change* satisfaction scores between the two factories.</code></pre>
+<pre class="r"><code>####################################################
+
+## Part B.II
+x &lt;- data.frame(E = as.numeric(t.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;])$estimate),
+                LB = t.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;])$conf.int[1],
+                UB = t.test(q6data$SatisImprov[q6data$Factory==&quot;Pilot&quot;])$conf.int[2])
+
+colnames(x) &lt;- c(&quot;Estimate&quot;, &quot;Lower Bound&quot;, &quot;Upper Bound&quot;)
+rownames(x) &lt;- c(NULL)
+
+pandoc.table(x,
+             caption = &quot;**Table Q6B.3:** Point estimate and 95% confidence interval limits for the mean *SatisImprov* (change in satisfaction scores) at the pilot factory.&quot;,
+             split.table = Inf)</code></pre>
+<pre><code>## 
+## --------------------------------------
+##  Estimate   Lower Bound   Upper Bound 
+## ---------- ------------- -------------
+##   4.133        2.369         5.898    
+## --------------------------------------
+## 
+## **Table Q6B.3:** Point estimate and 95% confidence interval limits for the mean *SatisImprov* (change in satisfaction scores) at the pilot factory.</code></pre>
+<p><br> <br></p>
+</div>
+<div id="a7" class="section level2">
+<h2>A7</h2>
+<pre class="r"><code>## Import Data
+q7data &lt;- data.frame(read.table(&quot;data/electromyographic.txt&quot;, header = T, sep = &quot;&quot;))
+
+############################################
+
+## Part A 
+s &lt;- aov(electromyographic ~ Subject + Muscle, data = q7data)
+summary(s)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## Subject      1   3730    3730   7.269 0.0101 *
+## Muscle       1    540     540   1.053 0.3107  
+## Residuals   42  21550     513                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<pre class="r"><code>############################################
+
+## Part B  
+m &lt;- aov(electromyographic ~ Muscle + Subject, data = q7data)
+summary(m)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## Muscle       1    540     540   1.053 0.3107  
+## Subject      1   3730    3730   7.269 0.0101 *
+## Residuals   42  21550     513                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<pre class="r"><code>############################################
+
+## Part C 
+ms &lt;- aov(electromyographic ~ Subject + Muscle + Subject:Muscle, data = q7data)
+summary(ms)</code></pre>
+<pre><code>##                Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+## Subject         1   3730    3730   7.795 0.00792 **
+## Muscle          1    540     540   1.129 0.29420   
+## Subject:Muscle  1   1932    1932   4.038 0.05109 . 
+## Residuals      41  19618     478                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p><br> <br></p>
+</div>
+<div id="a8" class="section level2">
+<h2>A8</h2>
+<pre class="r"><code>## Import Data
+q8data &lt;- data.frame(read.table(&quot;data/ExperienceCompetingTask.txt&quot;, header = T, sep = &quot;&quot;))
+
+#########################################
+
+## Part A
+fit &lt;- glm(CompletingtheTask ~ MonthsofExperience, data = q8data, family = &quot;binomial&quot;)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = CompletingtheTask ~ MonthsofExperience, family = &quot;binomial&quot;, 
+##     data = q8data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0184  -0.9317   0.4726   0.9415   1.4985  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)        -1.68420    0.94508  -1.782   0.0747 .
+## MonthsofExperience  0.11938    0.05889   2.027   0.0427 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 34.617  on 24  degrees of freedom
+## Residual deviance: 29.374  on 23  degrees of freedom
+## AIC: 33.374
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<pre class="r"><code>#########################################
+
+## Part B
+val &lt;- predict(fit, newdata = data.frame(MonthsofExperience = 24))
+val.p &lt;- exp(val)/(1 + exp(val) )
+val.p</code></pre>
+<pre><code>##         1 
+## 0.7651155</code></pre>
+<pre class="r"><code>#########################################
+
+s.fit &lt;- summary(fit)
+s.fit$cov.unscaled</code></pre>
+<pre><code>##                    (Intercept) MonthsofExperience
+## (Intercept)         0.89317648       -0.049067477
+## MonthsofExperience -0.04906748        0.003468527</code></pre>
+<pre class="r"><code>#########################################
+
+val</code></pre>
+<pre><code>##        1 
+## 1.180933</code></pre>
+<pre class="r"><code>qt(0.975, 23)</code></pre>
+<pre><code>## [1] 2.068658</code></pre>
+<p><br> <br></p>
+</div>
+<div id="a9" class="section level2">
+<h2>A9</h2>
 </div>
 </div>
 
