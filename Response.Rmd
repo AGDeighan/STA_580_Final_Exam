@@ -632,7 +632,7 @@ pandoc.table(x,
 <br>
 <br>
 
-#### I
+#### II
 
   The formula for constructing a 95% confidence interval for the mean *SatisImprov* (change in satisfaction scores, $\mu_c$) at the factory is given below:
   
@@ -663,6 +663,216 @@ pandoc.table(x,
   We are 95% confident that the interval 2.369 - 5.898 includes the mean *SatisImprov* (change in satisfaction score) at the pilot factory.
   
 <br>
+<br>
+
+
+
+## Question 7
+
+For full code see appendix [A7](#a7)
+
+> To develop which muscles need to be subjected to conditioning program in order to
+improve one’s performance on the flat serve used in tennis, the study “An
+Electromyographic -Cinematrographic Analysis of the Tennis Serve” was conducted by
+the Department of Health, Physical Education and Recreation at the Virginia Polytechnic
+Institute and State University in 1978. Five different muscles
+1: anterior deltoid
+2: pectorial major
+3: posterior deltoid
+4: middle deltoid
+5: triceps
+were tested on each of three subjects, and the experiment was carried out three times for each
+treatment combination. The electrographic data, recorded during the serve, are given in the
+following table. Data file “electromyographic.txt”.
+
+![](images/q7table.png)
+
+> Use alpha = 0.01 level of significance to test the hypothesis that
+>
+> > a. Different subjects have equal electromyographic measurements.
+> > b. Different muscles have no effect on electromyographic measurements.
+> > c. Subjects and type of muscle do not interact.
+
+```{r}
+## Import Data
+q7data <- data.frame(read.table("data/electromyographic.txt", header = T, sep = ""))
+```
+
+<br>
+
+### Part A
+
+  We will perform a two-way anova to see if subjects have different electromyographic measurements when controlling for muscle type. We will use an alpha level of 0.01 for this test. The null hypothesis of this test is that all the subjects have equal electromyographic measurements. The alternative hypothesis is that at least one of the subjects has different electromyographic measurements. We will use the "aov()" function in R to perform this test. See below:
+
+```{r}  
+s <- aov(electromyographic ~ Subject + Muscle, data = q7data)
+summary(s)
+```
+  
+  From the above summary output we can see that the F-test statistic for a difference between subjects is 7.269. The p-value for this statistic is 0.0101, this p-value is greater than our alpha level of 0.01. Even though the p-value is only *slightly* greater than the alpha level we still fail to reject the null hypothesis at a significance level of 1%. Thus we cautiously conclude that there is no evidence of a difference in electromyographic measurements between subjects.
+
+<br>
+<br>
+
+### Part B
+
+  We will perform a two-way anova to see if different muscle have any effect on electromyographic measurements when controlling for subject. The null hypothesis for this test is that none of the muscle type have any effect on electromyographic measurements. The alternative hypothesis is that at least one muscle type has an effect on the electromyographic measurements. We will perform this test at an alpha level of 0.01. Again, we will use the R funtion "aov()" to perform this test. See below:
+  
+```{r}  
+m <- aov(electromyographic ~ Muscle + Subject, data = q7data)
+summary(m)
+```
+  
+ The observed F test statistic is 1.053. The probability (p-value) of observing a test-statistic this large or larger under the null hypothesis is 0.3107. Since this is larger than our alpha level we fail to reject the null hypothesis. We conclude that there is no significant evidence of an effect of muscle type on electromyographic measurements.
+ 
+<br>
+<br>
+
+### Part C
+
+  To test whether subject and muscle type interact we will perform a two-way anova including an interaction term between muscle type and subject. The null hypothesis for this test is that there is no interaction effect between muscle type and any subject on electromyographic reading. The alternative hypothesis is that at there is an effect from the interaction of at least one significant interaction effect between muscle and subject. We will use an alpha level of 0.01 for this test. We will use the R function "aov()" to perform this test. See below:
+
+```{r}  
+ms <- aov(electromyographic ~ Subject + Muscle + Subject:Muscle, data = q7data)
+summary(ms)
+```
+
+  The observed F test statistic for the interaction between subject and muscle is 4.038. The probability (p-value) of observing a test statistic this large or larger under the null hypothesis is 0.05109. Since this p-value is larger than our alpha level we fail to reject the null hypothesis at a significance level of 1%. We conclude that there is no evidence that subjects and muscles have an interaction effect on electromyographic measurements.
+  
+  
+<br>
+<br>
+
+## Queation 8
+
+For full code see appendix [A8](#a8)
+
+> (only for graduate students) A quality control engineer studied the relationship between
+years of experience of a system control engineer on the capacity of the engineer to
+complete within a given time a complex control design including the debugging of all
+computer programs and control devices. A group of 25 engineers having a wide
+difference in experience (measured in months of experience) were given the same control
+design project. The results of the study are given in the following table with y = 1 if the
+project was successfully completed in the allocated time and y = 0 if the project was
+not successfully completed. Data file “ExperienceCompetingTask.txt”.
+>
+>a. Determine whether experience is associated with the probability of completing the task.
+>b. Compute the probability of successfully completing the task for an engineer having 24
+months of experience. Place a 95% confidence interval on your estimate.
+
+```{r}
+## Import Data
+q8data <- data.frame(read.table("data/ExperienceCompetingTask.txt", header = T, sep = ""))
+```
+
+<br>
+
+### Part A
+
+  For all following tests, the alpha level is taken to be 0.05.
+
+  To determine whether experience is associate with the probability of completing a task, I will use the data to fit a logistic regression model such that:
+  
+  $$ logit(\widehat{\pi}_c) = ln(\frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c}) = \widehat{\beta}_0 + \widehat{\beta}_1*m $$
+  Where $\widehat{\pi}_c$ is the predicted probability of completing a task, $\frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c}$ is the odds of completing a task, and $m$ is the months of experience. $\beta_1$ is the slope parameter which describes the relationship between the months of experience an engineer has and their odds of success. Our null hypothesis is that there is no association between months of experience and odds of completing a task ($\beta_1 = 0$). Our alternative hypothesis is that there is an associtation between months of experiance and odds of completing a task ($\beta_1 \neq 0$). Due to the definition of odds, an association between odds of completing a task and months of experience means there is an association between probability of completing a task and months of experience. Thus, if we reject our null hypothesis we will conclude that there is an association between months of experience and probability of completing a task. We will use the R function "glm()" to fit the above model. We can use the "summary()" function to find the p-value of the fitted slope coefficient for *MonthsofExperience*. See below:
+
+```{r}
+fit <- glm(CompletingtheTask ~ MonthsofExperience, data = q8data, family = "binomial")
+summary(fit)
+```
+
+  The p-value of the slope parameter for *MonthsofExperience* is 0.0427. This is less than the alpha level 0.05 so we reject the null hypothesis that there is no association between months of experience and probability of completing a task and conclude that there is an association between the two.
+
+<br>
+<br>
+
+### Part B
+
+  Now we will compute the *expected* mean probability of successfully completing a task for an engineer with 24 months of experience. Recall our model gives the expected mean *log odds*. We want the expected mean *probability*. Thus we will have to re-arrange the formula:
+  
+  $$ logit(\widehat{\pi}_c) = ln(\frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c}) = \widehat{\beta}_0 + \widehat{\beta}_1*m $$  
+  
+  $$ \frac{\widehat{\pi}_c}{1 - \widehat{\pi}_c} =  e^{\widehat{\beta}_0 + \widehat{\beta}_1*m } $$
+  $$\widehat{\pi}_c = \frac{e^{\widehat{\beta}_0 + \widehat{\beta}_1*m }}{1 + e^{\widehat{\beta}_0 + \widehat{\beta}_1*m }}$$
+
+  Using the "predict()" function in R, we can use the logistic model object "fit" that we created with R in part A to find the fitted $logit(\widehat{\pi}_c)$ for 24 months of experience. Then use the formula above to calculate the expected probability. See below:
+
+```{r}
+val <- predict(fit, newdata = data.frame(MonthsofExperience = 24))
+val.p <- exp(val)/(1 + exp(val) )
+val.p
+```
+  
+  So the estimated expected mean probability of successfully completing a task for an engineer with 24 months of experience is ~0.765. In order to construct a 95% confidence interval we need to estimate the standard error of the estimate. This is hard to do directly for the probability. Instead we will do it for the log-odds, find the 95% confidence bound for the expected log-odds and then convert this to probability. The formula for the standard error of the expected log-odds of successfully completing a task is shown below:
+  
+  $$ \widehat{SE}[logit(\widehat{\pi}_c)] = \sqrt{\widehat{V}[\widehat{\beta}_0] + \widehat{V}[\widehat{\beta}_1] + 2 * \widehat{Cov}[\widehat{\beta}_0, \space \widehat{\beta}_1]} $$
+<br>
+
+  We can find estimates of the above variances and covariances from the summary object of the logistic model object "fit" that we previously created. See below:
+  
+```{r}
+s.fit <- summary(fit)
+s.fit$cov.unscaled
+```
+
+  From the output above we can see that $\widehat{V}[\widehat{\beta}_0] =  0.89317648$, $\widehat{V}[\widehat{\beta}_1] = 0.003468527$, and $\widehat{Cov}[\widehat{\beta}_0, \space \widehat{\beta}_1] =  -0.049067477$. Thus our estimated standard error is:
+
+  $$ \widehat{SE}[logit(\widehat{\pi}_c)] = \sqrt{0.89317648 +  0.003468527 - 2 * 0.049067477} = 0.892990208 $$
+
+  The expected mean log-odds of successfully completing a task for an engineer with 24 months of experiance is:
+  
+```{r}
+val
+qt(0.975, 23)
+```
+
+  We will use this estimated log-odds value and the estimated standard error above to construct the 95% confidence interval for expected mean log-odds of successfully completing a task. Since our sample size is 25 and our model has two parameters we will need to use a t-distribution with 23 degrees of freedom to calculate the critical value $t_{23, \space (1 - 0.05/2)} = t_{23, \space 0.975} = 2.068658$. Thus our 95% confidence interval is:
+
+  $$ 95\%\text{ CI}[logit(\pi_c)] = 1.180933 \pm 2.068658*0.892990208 = (-0.037961338, \space 3.656621338) $$
+  Now if we convert this to probability form, our 95% confidence interval for the mean probability of success of completing a task for an engineer with 24 months of experience is:
+  
+  $$ 95\%\text{ CI}[\pi_c] =  (\frac{e^{-0.037961338}}{1 + e^{-0.037961338}}, \space \frac{e^{3.656621338}}{1 + e^{3.656621338}}) \approx (0.491, \space 0.975 ) $$
+  Thus we are 95% confident that the interval 0.491 - 0.975 includes the mean probability of success of completing a task for an engineer with 24 months of experience.
+  
+  
+<br>
+<br>
+
+## Question 9
+
+  For full code see appendix [A9](#a9)
+  
+> (only for graduate students) Geriatric study. A researcher in geriatrics designed a
+prospective study to investigate the effects of two interventions on the frequency of falls.
+One hundred subjects were randomly assigned to one of the two interventions: education
+only (X1 = 0) and education plus aerobic exercise training (X1 =1) . Subjects were
+at least 65 years of age and in reasonably good health. Three variables considered to be
+important as control variables were gender (X2 : 0 = female ; 1 = male) , a
+balance index (X3) , and a strength index (X4 ) . The higher the balance index, the
+more stable is the subject: and the higher the strength index, the stronger is the subject.
+The subject kept a diary recording the number of falls (Y ) during the six months of the
+study. The data are given in the following table. Data file “GeriatricStudy.txt”.
+>
+> a. Fit the Poisson regression model with the response function
+
+![](images/q9formula.png)
+
+> State the estimated regression coefficients, their estimated standard deviations. and the
+estimated response function.
+>
+>b. Obtain the deviance residuals and present them in an index plot. Do there appear to be
+any outlying cases?
+>c. Assuming that the fitted model is appropriate, use the likelihood ratio test to determine
+whether gender (X2 ) can be dropped from the model: control a at 0.05. State the full
+and reduced models, decision rule, and conclusion. What is the P-value of the test?
+>d. For the fitted model containing only X1, X3 and X4 in first-order terms, obtain an
+approximate 95% confidence interval for b1. Interpret your confidence interval. Does
+aerobic exercise reduce the frequency of falls when controlling for balance and strength?
+>e. Fit the four-simple Poisson regression models with one independent variable, one X , at
+a time. Interpret the results.
+
+
+
 <br>
 <br>
 
@@ -828,3 +1038,153 @@ t <- qt(0.95, 38)
 <br>
 
 ## A6
+
+```{r}
+## Import Data
+q6data <- data.frame(read.table("data/Pilot.txt", header = T, sep = ""))
+
+####################################################
+
+## Part A
+x <- data.frame(ts = c(shapiro.test(q6data$Before[q6data$Factory=="Pilot"])$statistic, 
+                       shapiro.test(q6data$Before[q6data$Factory=="NonPilot"])$statistic),
+                p = c(shapiro.test(q6data$Before[q6data$Factory=="Pilot"])$p.value, 
+                       shapiro.test(q6data$Before[q6data$Factory=="NonPilot"])$p.value))
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c("Pilot Factory", "Non-Pilot Factory")
+
+pandoc.table(x,
+             caption = "**Table Q6A.1:** Results of Shapiro-Wilk normality test of satisfaction scores of each factory before the program.",
+             split.table = Inf)
+
+####################################################
+
+x <- data.frame(ts = c(t.test(q6data$Before[q6data$Factory=="Pilot"], q6data$Before[q6data$Factory=="NonPilot"])$statistic),
+                p = c(t.test(q6data$Before[q6data$Factory=="Pilot"], q6data$Before[q6data$Factory=="NonPilot"])$p.value)
+                )
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c(NULL)
+
+pandoc.table(x,
+             caption = "**Table Q6A.2:** Results of t-test for a difference in the mean before-program satisfaction scores between the factories.",
+             split.table = Inf)
+
+####################################################
+
+## Part B
+q6data[, "SatisImprov"] <- q6data$After - q6data$Before
+
+####################################################
+
+## Part B.I
+x <- data.frame(ts = c(shapiro.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$statistic, 
+                       shapiro.test(q6data$SatisImprov[q6data$Factory=="NonPilot"])$statistic),
+                p = c(shapiro.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$p.value, 
+                       shapiro.test(q6data$SatisImprov[q6data$Factory=="NonPilot"])$p.value))
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c("Pilot Factory", "Non-Pilot Factory")
+
+pandoc.table(x,
+             caption = "**Table Q6B.3:** Results of Shapiro-Wilk normality test of change in satisfaction scores at each factory.",
+             split.table = Inf)
+
+####################################################
+
+x <- data.frame(ts = c(t.test(q6data$SatisImprov[q6data$Factory=="Pilot"], q6data$SatisImprov[q6data$Factory=="NonPilot"])$statistic),
+                p = c(t.test(q6data$SatisImprov[q6data$Factory=="Pilot"], q6data$SatisImprov[q6data$Factory=="NonPilot"])$p.value)
+                )
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c(NULL)
+
+pandoc.table(x,
+             caption = "**Table Q6B.2:** Results of t-test for a difference in the mean *change* satisfaction scores between the two factories.",
+             split.table = Inf)
+
+####################################################
+
+## Part B.II
+x <- data.frame(E = as.numeric(t.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$estimate),
+                LB = t.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$conf.int[1],
+                UB = t.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$conf.int[2])
+
+colnames(x) <- c("Estimate", "Lower Bound", "Upper Bound")
+rownames(x) <- c(NULL)
+
+pandoc.table(x,
+             caption = "**Table Q6B.3:** Point estimate and 95% confidence interval limits for the mean *SatisImprov* (change in satisfaction scores) at the pilot factory.",
+             split.table = Inf)
+
+```
+
+
+<br>
+<br>
+
+## A7
+```{r}
+## Import Data
+q7data <- data.frame(read.table("data/electromyographic.txt", header = T, sep = ""))
+
+############################################
+
+## Part A 
+s <- aov(electromyographic ~ Subject + Muscle, data = q7data)
+summary(s)
+
+############################################
+
+## Part B  
+m <- aov(electromyographic ~ Muscle + Subject, data = q7data)
+summary(m)
+
+############################################
+
+## Part C 
+ms <- aov(electromyographic ~ Subject + Muscle + Subject:Muscle, data = q7data)
+summary(ms)
+```
+
+
+
+<br>
+<br>
+
+## A8
+
+```{r}
+## Import Data
+q8data <- data.frame(read.table("data/ExperienceCompetingTask.txt", header = T, sep = ""))
+
+#########################################
+
+## Part A
+fit <- glm(CompletingtheTask ~ MonthsofExperience, data = q8data, family = "binomial")
+summary(fit)
+
+#########################################
+
+## Part B
+val <- predict(fit, newdata = data.frame(MonthsofExperience = 24))
+val.p <- exp(val)/(1 + exp(val) )
+val.p
+
+#########################################
+
+s.fit <- summary(fit)
+s.fit$cov.unscaled
+
+#########################################
+
+val
+qt(0.975, 23)
+```
+
+
+<br>
+<br>
+
+## A9
