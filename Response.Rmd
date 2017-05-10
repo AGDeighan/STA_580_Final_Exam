@@ -871,6 +871,11 @@ aerobic exercise reduce the frequency of falls when controlling for balance and 
 >e. Fit the four-simple Poisson regression models with one independent variable, one X , at
 a time. Interpret the results.
 
+<br>
+
+```{r}
+## Import Data
+q9data <- data.frame(read.table("GeriatricStudy.txt", header = T, sep = ""))
 
 
 <br>
