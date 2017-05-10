@@ -1,7 +1,6 @@
 ---
 title: "STA 580 Final Exam"
 author: "Andrew Deighan"
-date: "April 29, 2017"
 output: html_document
 ---
 
@@ -113,6 +112,8 @@ pandoc.table(x,
 <br>
 <br>
 
+<P style="page-break-before: always">
+
 ## Question 2
 
   For full code see appendix [A2](#a2)
@@ -220,6 +221,8 @@ $$ n = 0.9*0.1*(\frac{1.96}{0.02})^2 \approx 864.26 \rightarrow 864 $$
 <br>
 <br>
 
+<P style="page-break-before: always">
+
 ## Question 3
 
   For full code see appendix [A3](#a3)
@@ -301,6 +304,8 @@ pandoc.table(x,
 
 <br>
 <br>
+
+<P style="page-break-before: always">
 
 ## Question 4
 
@@ -389,6 +394,8 @@ $$ n = (\frac{1.64 * 10}{0.5})^2 = 1075.84 \rightarrow 1076 $$
 <br>
 <br>
 
+<P style="page-break-before: always">
+
 ## Question 5
 
   For full code see appendix [A5](#a5)
@@ -468,6 +475,8 @@ t <- qt(0.95, 38)
 
 <br>
 <br>
+
+<P style="page-break-before: always">
 
 ## Question 6
   
@@ -665,7 +674,7 @@ pandoc.table(x,
 <br>
 <br>
 
-
+<P style="page-break-before: always">
 
 ## Question 7
 
@@ -742,6 +751,8 @@ summary(ms)
   
 <br>
 <br>
+
+<P style="page-break-before: always">
 
 ## Queation 8
 
@@ -837,6 +848,8 @@ qt(0.975, 23)
   
 <br>
 <br>
+
+<P style="page-break-before: always">
 
 ## Question 9
 
@@ -1081,6 +1094,8 @@ s.fitS
 <br>
 <br>
 <br>
+
+<P style="page-break-before: always">
 
 # Appendix
 

@@ -11,7 +11,6 @@
 
 <meta name="author" content="Andrew Deighan" />
 
-<meta name="date" content="2017-04-29" />
 
 <title>STA 580 Final Exam</title>
 
@@ -119,7 +118,6 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">STA 580 Final Exam</h1>
 <h4 class="author"><em>Andrew Deighan</em></h4>
-<h4 class="date"><em>April 29, 2017</em></h4>
 
 </div>
 
@@ -214,6 +212,7 @@ $(document).ready(function () {
 <hr />
 <p>Since our p-value is less than 0.05 we reject the null hypothesis that the mean scores did not differ in favor of the alternative hypothesis that they did. Thus, we conclude that the students taught under the new curriculum performed better on the test than students taught under the old curriculum.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
@@ -315,6 +314,7 @@ $(document).ready(function () {
 <p><span class="math display">\[ n = \text{p}(1- \text{p})*(\frac{Z_{\alpha/2}}{E})^2 \]</span> Since we want a 95% confidence interval <em>Z</em> = 1.96. We already know we want <em>E</em> to be 0.02 and the question says that p is assumed to be 0.90 thus:</p>
 <p><span class="math display">\[ n = 0.9*0.1*(\frac{1.96}{0.02})^2 \approx 864.26 \rightarrow 864 \]</span> So, assuming the proportion of units defect free is at least 90%, if we want to estimate the proportion of products defect free within <span class="math inline">\(\pm 2\%\)</span> with 95% confidence we should have a sample size of 864.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 <div id="question-3" class="section level2">
@@ -399,6 +399,7 @@ $(document).ready(function () {
 <p><strong>Table Q3C:</strong> 95% confidence interval for the difference between the mean scores. Notice that the confidence interval includes 0, indicating that there is no significant evidence of a difference between the mean scores.</p>
 <hr />
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
@@ -466,6 +467,7 @@ $(document).ready(function () {
 <p><span class="math display">\[ n = (\frac{1.64 * 10}{0.5})^2 = 1075.84 \rightarrow 1076 \]</span></p>
 <p>So, assuming the standard deviation is no more than 10 hours, if we want to estimate the mean resolution time within <span class="math inline">\(\pm 0.5\)</span> hours with 95% confidence we should have a sample size of 1076.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 <div id="question-5" class="section level2">
@@ -534,6 +536,7 @@ Software (Sample 2):  mean = 6.0,   standard deviation = 0.75</code></pre>
 <p><span class="math display">\[ 90\% \space \text{CI [D]} = -1.3 \pm 1.69*\sqrt{\frac{3.625}{20}} \approx (-2.02, -0.581)\]</span></p>
 <p>Thus we are 90% confident that the the difference between the mean experiance entry-level telecommunication managers and entry-level software managers is between -2.02 and 0.581.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 <div id="question-6" class="section level2">
@@ -722,6 +725,7 @@ q6data &lt;- data.frame(read.table(&quot;data/Pilot.txt&quot;, header = T, sep =
 <p><br></p>
 <p>We are 95% confident that the interval 2.369 - 5.898 includes the mean <em>SatisImprov</em> (change in satisfaction score) at the pilot factory.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 </div>
@@ -790,6 +794,7 @@ summary(ms)</code></pre>
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>The observed F test statistic for the interaction between subject and muscle is 4.038. The probability (p-value) of observing a test statistic this large or larger under the null hypothesis is 0.05109. Since this p-value is larger than our alpha level we fail to reject the null hypothesis at a significance level of 1%. We conclude that there is no evidence that subjects and muscles have an interaction effect on electromyographic measurements.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 <div id="queation-8" class="section level2">
@@ -869,6 +874,7 @@ s.fit$cov.unscaled</code></pre>
 <p><span class="math display">\[ 95\%\text{ CI}[logit(\pi_c)] = 1.180933 \pm 2.068658*0.892990208 = (-0.037961338, \space 3.656621338) \]</span> Now if we convert this to probability form, our 95% confidence interval for the mean probability of success of completing a task for an engineer with 24 months of experience is:</p>
 <p><span class="math display">\[ 95\%\text{ CI}[\pi_c] =  (\frac{e^{-0.037961338}}{1 + e^{-0.037961338}}, \space \frac{e^{3.656621338}}{1 + e^{3.656621338}}) \approx (0.491, \space 0.975 ) \]</span> Thus we are 95% confident that the interval 0.491 - 0.975 includes the mean probability of success of completing a task for an engineer with 24 months of experience.</p>
 <p><br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 <div id="question-9" class="section level2">
@@ -1192,6 +1198,7 @@ s.fitS</code></pre>
 ## Number of Fisher Scoring iterations: 5</code></pre>
 <p>The estimated regression coefficient for strength index (higher strength index -&gt; stronger) is 0.008170 indicating that the frequency of falls is estimated to be <span class="math inline">\(e^0.008170\)</span> fold <em>higher</em> for every increment increase in strength index. The p-value (0.0461) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant, but it is boarder-line. This is a surprising result, because intuitively we would think stronger individuals would not fall as frequently.</p>
 <p><br> <br> <br></p>
+<P style="page-break-before: always">
 </div>
 </div>
 </div>
