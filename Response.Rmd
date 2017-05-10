@@ -11,7 +11,7 @@ output: html_document
 
 ## Question 1
 
-  For code see appendix [A1](#a1).
+  For full code see appendix [A1](#a1).
   
 > An educator believes that a new reading curriculum will help elementary school students improve some aspects of their reading ability. She arranges for a third-grade class of 21 students to take part in the new curriculum for an eight-week period. A control classroom of 23 third-graders follows the standard curriculum. At the end of the eight weeks, all students are given a Degree of Reading Power (DRP) test, which measures aspects of reading that the treatment is designed to improve “DRPscores.txt”.
 >
@@ -115,7 +115,7 @@ pandoc.table(x,
 
 ## Question 2
 
-  For code see appendix [A2](#a2)
+  For full code see appendix [A2](#a2)
 
 > A company is rated as acceptable in quality control if more than 90% of units produced at
 its facilities are found to be defect-free, and it is rated as excellent in quality control if
@@ -222,7 +222,7 @@ $$ n = 0.9*0.1*(\frac{1.96}{0.02})^2 \approx 864.26 \rightarrow 864 $$
 
 ## Question 3
 
-  For code see appendix [A3](#a3)
+  For full code see appendix [A3](#a3)
 
 > A large corporation requires that its employees attend a 1-day sexual harassment seminar.
 The Director of Human Resources of this corporation would like to determine whether or
@@ -304,7 +304,7 @@ pandoc.table(x,
 
 ## Question 4
 
- For code see appendix [A4](#a4)
+ For full code see appendix [A4](#a4)
 
 > The goal for the mean time to resolve software problems by the software support group
 of a large corporation is 24 hours. Suppose that 60 software problem items are randomly
@@ -391,7 +391,7 @@ $$ n = (\frac{1.64 * 10}{0.5})^2 = 1075.84 \rightarrow 1076 $$
 
 ## Question 5
 
-  For code see appendix [A5](#a5)
+  For full code see appendix [A5](#a5)
 
 > A study of industries in North Texas compared the experience of entry-level managers in
 telecommunication companies with the experience of entry-level managers in software services
@@ -470,7 +470,199 @@ t <- qt(0.95, 38)
 <br>
 
 ## Question 6
+  
+  For full code see appendix [A6](#a6)
 
+> A large corporation would like to determine if employee job satisfaction will improve if it
+includes profit sharing based on quality scores for its factory workers. To answer this
+question, a pilot program was begun at one of its factories. A random sample of 30
+workers from this factory was selected and, separately, a random sample of 30 workers
+was selected from another of its factories that did not implement this program. Prior to
+the start of the program each worker in these samples was given a test of job satisfaction
+as part of their normal review process. This test was then administered to the same
+employees six months after the start of the new program. Use 5% level of significance for
+the following questions. The data are contained in the file “Pilot.txt”.
+
+> a. Is there a difference between the mean satisfaction scores of these two factories before
+the pilot program is started?
+>
+>b. Let SatisImprov be defined as SatisImprov = After − Before.
+>
+> > i. Is there a difference between the means of SatisImprov at these factories?
+> > ii. Construct a 95% confidence interval for SatisImprov at the pilot factory.
+
+<br>
+
+  First we will import the data
+```{r}
+## Import Data
+q6data <- data.frame(read.table("data/Pilot.txt", header = T, sep = ""))
+```
+
+<br>
+
+### Part A
+
+  We will use a two sample t-test to compare the difference in the mean satisfaction scores between the two factories *before* the program was started.
+  
+  One of the assumptions of the t-test is that the data are normally distributed. We will use the Shapiro-Wilk test to test this assumption for the before program scores in each factory. The null hypothesis of the Shapiro-Wilk test is that the data come from a  normal distribution, the alternative hypothesis is that they do not. We will perform this test an an alpha level of 0.05. Thus, we will reject the null hypothesis that the data are normally distributed if the p-value is less than 0.05, otherwise we will accept the null hypothesis. Using the "shapiro.test()" function R we found the results reported in table Q6A.1.
+  
+***
+  
+```{r, echo=F, results="asis"}
+x <- data.frame(ts = c(shapiro.test(q6data$Before[q6data$Factory=="Pilot"])$statistic, 
+                       shapiro.test(q6data$Before[q6data$Factory=="NonPilot"])$statistic),
+                p = c(shapiro.test(q6data$Before[q6data$Factory=="Pilot"])$p.value, 
+                       shapiro.test(q6data$Before[q6data$Factory=="NonPilot"])$p.value))
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c("Pilot Factory", "Non-Pilot Factory")
+
+pandoc.table(x,
+             caption = "**Table Q6A.1:** Results of Shapiro-Wilk normality test of satisfaction scores of each factory before the program.",
+             split.table = Inf)
+
+```
+
+  ***
+  
+<br>
+  
+  Since the p-values in table Q6A.1 are both greater than 0.05 we will accept the null hypothesis that the data are normally distributed and continut with our t-test for a difference of means.
+  
+  The null hypothesis for our t-test is that the mean satisfaction score before the program does not differ between the two factories. Our alternative hypothesis is that the mean score does differ. We will perform this test at an alpha level of 0.05. The test statistic is given below. Under the null hypothesis this test statistic has a t distribution.
+  
+  $$ T = \frac{\bar{X_1} - \bar{X_2}}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} }} \sim t_{df} \\ \space \\ \space \\ \text{where:} \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad  \\ s_j = \frac{\sum_{i=1}^n(X_{ij} - \bar{X}_j)^2} {n_j-1} \quad \quad \quad \quad \quad \quad \quad \quad  \\ \space \\df = \frac{(s_1^2/n_1 + s_2^2/n_2 )^2}{(s_1^2/n_1)/(n_1-1) + (s_2^2/n_2)/(n_2-1)}$$
+
+<br>
+
+  From here on out, when we refer to "sample 1" (i.e. $s_1^2$) we are referring to the sample from the pilot factory and when we refer to "sample 2" we are referring to the non-pilot factor. We can use the R function "t.test()" to calculate the above statistic and it's associated p-value. Table Q6A.2 reports the results of this test.
+
+***
+
+```{r, echo=F, results="asis"}
+x <- data.frame(ts = c(t.test(q6data$Before[q6data$Factory=="Pilot"], q6data$Before[q6data$Factory=="NonPilot"])$statistic),
+                p = c(t.test(q6data$Before[q6data$Factory=="Pilot"], q6data$Before[q6data$Factory=="NonPilot"])$p.value)
+                )
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c(NULL)
+
+pandoc.table(x,
+             caption = "**Table Q6A.2:** Results of t-test for a difference in the mean before-program satisfaction scores between the factories.",
+             split.table = Inf)
+
+```
+
+***
+
+<br>
+
+  The p-value of the observed test statistic is much larger than 0.05 so we fail to reject the null hypothesis and conclude that there is no difference in mean satisifaction scores between the factories before the program.
+  
+<br>
+<br>
+
+### Part B
+
+  We will define a new variable *SatisImprov* which equals the difference between the after-program and before-program satisfaction scores:
+
+```{r}
+q6data[, "SatisImprov"] <- q6data$After - q6data$Before
+```
+
+<br>
+
+#### I
+
+  Again we will perform a two-sample t-test to test if there is a difference in the mean change in scores between the two programs. First we will perform Shapiro-Wilk tests of normality (using the "shapiro.test()" function in R) to determine if the changes in satisfaction scores at the two plants are normally distributed. We will perform these tests at an alpha level of 0.05. The results are reported in table Q6B.1.
+  
+***
+  
+```{r, echo=F, results="asis"}
+x <- data.frame(ts = c(shapiro.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$statistic, 
+                       shapiro.test(q6data$SatisImprov[q6data$Factory=="NonPilot"])$statistic),
+                p = c(shapiro.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$p.value, 
+                       shapiro.test(q6data$SatisImprov[q6data$Factory=="NonPilot"])$p.value))
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c("Pilot Factory", "Non-Pilot Factory")
+
+pandoc.table(x,
+             caption = "**Table Q6B.3:** Results of Shapiro-Wilk normality test of change in satisfaction scores at each factory.",
+             split.table = Inf)
+
+```
+
+***
+
+<br>
+
+  The p-value for the change in scores at the pilot factory is greater than 0.05 so we can accept the null hypothesis that the changes in scores at the pilot factory are normally distributed. However, the p-value for the non-pilot factory is less than 0.05 so we have to reject the null hypothesis and conclude that the changes in scores are not normally distributed at the non-pilot factor. However, since our sample size is 30 and we are comparing means, we can, according to the central limit theorem cautiously conclude that the *mean* change in scores is normally distributed. So we will continue with our hypothesis test but we will keep the departure in normality in mind.
+  
+  Again since we are performing a two-sample t-test the test-statistic formula will be the same as that described in part A but now $\bar{X}$ refers to the mean change in scores and $s^2$ refers to the sample variance of the mean change in scores.
+  
+  $$ T = \frac{\bar{X_1} - \bar{X_2}}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} }} \sim t_{df} \\ \space \\ \space \\ \text{where:} \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad  \\ s_j = \frac{\sum_{i=1}^n(X_{ij} - \bar{X}_j)^2} {n_j-1} \quad \quad \quad \quad \quad \quad \quad \quad  \\ \space \\df = \frac{(s_1^2/n_1 + s_2^2/n_2 )^2}{(s_1^2/n_1)/(n_1-1) + (s_2^2/n_2)/(n_2-1)}$$
+<br>
+
+  Once again we will use the "t.test()" function in R to perform this test at an alpha level of 0.05. The null hypothesis for this test is that the mean change in satisfaction scores does not differ between the two factories. The alternative hypothesis is that it does. Table Q6B.2 reports the results of this test.
+
+***
+
+```{r, echo=F, results="asis"}
+x <- data.frame(ts = c(t.test(q6data$SatisImprov[q6data$Factory=="Pilot"], q6data$SatisImprov[q6data$Factory=="NonPilot"])$statistic),
+                p = c(t.test(q6data$SatisImprov[q6data$Factory=="Pilot"], q6data$SatisImprov[q6data$Factory=="NonPilot"])$p.value)
+                )
+
+colnames(x) <- c("Test Statistic", "P-value")
+rownames(x) <- c(NULL)
+
+pandoc.table(x,
+             caption = "**Table Q6B.2:** Results of t-test for a difference in the mean *change* satisfaction scores between the two factories.",
+             split.table = Inf)
+
+```
+
+***
+
+<br>
+
+  The p-value for the observed test statistic is much lower than our alpha level so we must reject our null hypothesis. We conclude that there is a difference in the mean change in satisfaction scores (e.g. *SatisImprov*) between the two factories.
+  
+<br>
+<br>
+
+#### I
+
+  The formula for constructing a 95% confidence interval for the mean *SatisImprov* (change in satisfaction scores, $\mu_c$) at the factory is given below:
+  
+  $$ 95\% \text{ CI}[\mu_c] = \overline{SatisImprov} \space \pm t_{29, \space (1 - 0.025)} * \sqrt{\frac{s^2}{29}}$$
+  
+  We can use the R function "t.test()" to aquire this confidence interval. The interval is reported in table Q6B.3.
+
+***  
+  
+```{r, echo=F, results="asis"}
+x <- data.frame(E = as.numeric(t.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$estimate),
+                LB = t.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$conf.int[1],
+                UB = t.test(q6data$SatisImprov[q6data$Factory=="Pilot"])$conf.int[2])
+
+colnames(x) <- c("Estimate", "Lower Bound", "Upper Bound")
+rownames(x) <- c(NULL)
+
+pandoc.table(x,
+             caption = "**Table Q6B.3:** Point estimate and 95% confidence interval limits for the mean *SatisImprov* (change in satisfaction scores) at the pilot factory.",
+             split.table = Inf)
+
+```
+
+***
+
+<br>
+
+  We are 95% confident that the interval 2.369 - 5.898 includes the mean *SatisImprov* (change in satisfaction score) at the pilot factory.
+  
+<br>
 <br>
 <br>
 

@@ -129,7 +129,7 @@ $(document).ready(function () {
 <p><br></p>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
-<p>For code see appendix <a href="#a1">A1</a>.</p>
+<p>For full code see appendix <a href="#a1">A1</a>.</p>
 <blockquote>
 <p>An educator believes that a new reading curriculum will help elementary school students improve some aspects of their reading ability. She arranges for a third-grade class of 21 students to take part in the new curriculum for an eight-week period. A control classroom of 23 third-graders follows the standard curriculum. At the end of the eight weeks, all students are given a Degree of Reading Power (DRP) test, which measures aspects of reading that the treatment is designed to improve “DRPscores.txt”.</p>
 <p>Test the hypothesis that the treatment group performed better than the control group on the test. State your conclusions.</p>
@@ -217,7 +217,7 @@ $(document).ready(function () {
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<p>For code see appendix <a href="#a2">A2</a></p>
+<p>For full code see appendix <a href="#a2">A2</a></p>
 <blockquote>
 <p>A company is rated as acceptable in quality control if more than 90% of units produced at its facilities are found to be defect-free, and it is rated as excellent in quality control if more than 95% are defect-free. Suppose that a random sample of 500 units is selected and tested for defects, and that 18 units are found to have defects.</p>
 <ol style="list-style-type: lower-alpha">
@@ -319,7 +319,7 @@ $(document).ready(function () {
 </div>
 <div id="question-3" class="section level2">
 <h2>Question 3</h2>
-<p>For code see appendix <a href="#a3">A3</a></p>
+<p>For full code see appendix <a href="#a3">A3</a></p>
 <blockquote>
 <p>A large corporation requires that its employees attend a 1-day sexual harassment seminar. The Director of Human Resources of this corporation would like to determine whether or not the information presented in this seminar is retained over a long period of time. To this end, a random sample of 40 employees is selected from recently hired employees who are scheduled to take this seminar. Each of the employees in this sample completes a test of knowledge concerning sexual harassment and related legal issues immediately after the seminar, and then takes a similar test 6 months later. The scores are contained in the file “harass.txt”.</p>
 <p>Does that data indicate at the 5% level of significance that the mean score has changed after 6 months? Construct a 95% confidence interval for the difference between the mean scores.</p>
@@ -402,7 +402,7 @@ $(document).ready(function () {
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
-<p>For code see appendix <a href="#a4">A4</a></p>
+<p>For full code see appendix <a href="#a4">A4</a></p>
 <blockquote>
 <p>The goal for the mean time to resolve software problems by the software support group of a large corporation is 24 hours. Suppose that 60 software problem items are randomly selected from all such items over the past quarter, and the mean time to resolve the problems was 22.4 hours with a standard deviation of 9.6 hours.</p>
 <ol style="list-style-type: lower-alpha">
@@ -470,7 +470,7 @@ $(document).ready(function () {
 </div>
 <div id="question-5" class="section level2">
 <h2>Question 5</h2>
-<p>For code see appendix <a href="#a5">A5</a></p>
+<p>For full code see appendix <a href="#a5">A5</a></p>
 <blockquote>
 <p>A study of industries in North Texas compared the experience of entry-level managers in telecommunication companies with the experience of entry-level managers in software services companies. Suppose that a random sample of size 20 entry-level managers was selected separately from each group of companies and the experience of each manager was obtained. The data summary are:</p>
 <pre><code>Telecom (Sample 1):   mean = 4.7,   standard deviation = 1.75
@@ -538,7 +538,192 @@ Software (Sample 2):  mean = 6.0,   standard deviation = 0.75</code></pre>
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
+<p>For full code see appendix <a href="#a6">A6</a></p>
+<blockquote>
+<p>A large corporation would like to determine if employee job satisfaction will improve if it includes profit sharing based on quality scores for its factory workers. To answer this question, a pilot program was begun at one of its factories. A random sample of 30 workers from this factory was selected and, separately, a random sample of 30 workers was selected from another of its factories that did not implement this program. Prior to the start of the program each worker in these samples was given a test of job satisfaction as part of their normal review process. This test was then administered to the same employees six months after the start of the new program. Use 5% level of significance for the following questions. The data are contained in the file “Pilot.txt”.</p>
+</blockquote>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li><p>Is there a difference between the mean satisfaction scores of these two factories before the pilot program is started?</p></li>
+<li><p>Let SatisImprov be defined as SatisImprov = After − Before.</p></li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-roman">
+<li>Is there a difference between the means of SatisImprov at these factories?</li>
+<li>Construct a 95% confidence interval for SatisImprov at the pilot factory.</li>
+</ol>
+</blockquote>
+</blockquote>
+<p><br></p>
+<p>First we will import the data</p>
+<pre class="r"><code>## Import Data
+q6data &lt;- data.frame(read.table(&quot;data/Pilot.txt&quot;, header = T, sep = &quot;&quot;))</code></pre>
+<p><br></p>
+<div id="part-a-3" class="section level3">
+<h3>Part A</h3>
+<p>We will use a two sample t-test to compare the difference in the mean satisfaction scores between the two factories <em>before</em> the program was started.</p>
+<p>One of the assumptions of the t-test is that the data are normally distributed. We will use the Shapiro-Wilk test to test this assumption for the before program scores in each factory. The null hypothesis of the Shapiro-Wilk test is that the data come from a normal distribution, the alternative hypothesis is that they do not. We will perform this test an an alpha level of 0.05. Thus, we will reject the null hypothesis that the data are normally distributed if the p-value is less than 0.05, otherwise we will accept the null hypothesis. Using the “shapiro.test()” function R we found the results reported in table Q6A.1.</p>
+<hr />
+<table style="width:69%;">
+<colgroup>
+<col width="33%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Pilot Factory</strong></td>
+<td align="center">0.9515</td>
+<td align="center">0.1854</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Non-Pilot Factory</strong></td>
+<td align="center">0.985</td>
+<td align="center">0.9377</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q6A.1:</strong> Results of Shapiro-Wilk normality test of satisfaction scores of each factory before the program.</p>
+<hr />
+<p><br></p>
+<p>Since the p-values in table Q6A.1 are both greater than 0.05 we will accept the null hypothesis that the data are normally distributed and continut with our t-test for a difference of means.</p>
+<p>The null hypothesis for our t-test is that the mean satisfaction score before the program does not differ between the two factories. Our alternative hypothesis is that the mean score does differ. We will perform this test at an alpha level of 0.05. The test statistic is given below. Under the null hypothesis this test statistic has a t distribution.</p>
+<p><span class="math display">\[ T = \frac{\bar{X_1} - \bar{X_2}}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} }} \sim t_{df} \\ \space \\ \space \\ \text{where:} \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad  \\ s_j = \frac{\sum_{i=1}^n(X_{ij} - \bar{X}_j)^2} {n_j-1} \quad \quad \quad \quad \quad \quad \quad \quad  \\ \space \\df = \frac{(s_1^2/n_1 + s_2^2/n_2 )^2}{(s_1^2/n_1)/(n_1-1) + (s_2^2/n_2)/(n_2-1)}\]</span></p>
+<p><br></p>
+<p>From here on out, when we refer to “sample 1” (i.e. <span class="math inline">\(s_1^2\)</span>) we are referring to the sample from the pilot factory and when we refer to “sample 2” we are referring to the non-pilot factor. We can use the R function “t.test()” to calculate the above statistic and it’s associated p-value. Table Q6A.2 reports the results of this test.</p>
+<hr />
+<table style="width:36%;">
+<colgroup>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Test Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">-0.0376</td>
+<td align="center">0.9701</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q6A.2:</strong> Results of t-test for a difference in the mean before-program satisfaction scores between the factories.</p>
+<hr />
+<p><br></p>
+<p>The p-value of the observed test statistic is much larger than 0.05 so we fail to reject the null hypothesis and conclude that there is no difference in mean satisifaction scores between the factories before the program.</p>
 <p><br> <br></p>
+</div>
+<div id="part-b-3" class="section level3">
+<h3>Part B</h3>
+<p>We will define a new variable <em>SatisImprov</em> which equals the difference between the after-program and before-program satisfaction scores:</p>
+<pre class="r"><code>q6data[, &quot;SatisImprov&quot;] &lt;- q6data$After - q6data$Before</code></pre>
+<p><br></p>
+<div id="i" class="section level4">
+<h4>I</h4>
+<p>Again we will perform a two-sample t-test to test if there is a difference in the mean change in scores between the two programs. First we will perform Shapiro-Wilk tests of normality (using the “shapiro.test()” function in R) to determine if the changes in satisfaction scores at the two plants are normally distributed. We will perform these tests at an alpha level of 0.05. The results are reported in table Q6B.1.</p>
+<hr />
+<table style="width:69%;">
+<colgroup>
+<col width="33%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Test Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Pilot Factory</strong></td>
+<td align="center">0.9464</td>
+<td align="center">0.135</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Non-Pilot Factory</strong></td>
+<td align="center">0.8587</td>
+<td align="center">0.0009496</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q6B.3:</strong> Results of Shapiro-Wilk normality test of change in satisfaction scores at each factory.</p>
+<hr />
+<p><br></p>
+<p>The p-value for the change in scores at the pilot factory is greater than 0.05 so we can accept the null hypothesis that the changes in scores at the pilot factory are normally distributed. However, the p-value for the non-pilot factory is less than 0.05 so we have to reject the null hypothesis and conclude that the changes in scores are not normally distributed at the non-pilot factor. However, since our sample size is 30 and we are comparing means, we can, according to the central limit theorem cautiously conclude that the <em>mean</em> change in scores is normally distributed. So we will continue with our hypothesis test but we will keep the departure in normality in mind.</p>
+<p>Again since we are performing a two-sample t-test the test-statistic formula will be the same as that described in part A but now <span class="math inline">\(\bar{X}\)</span> refers to the mean change in scores and <span class="math inline">\(s^2\)</span> refers to the sample variance of the mean change in scores.</p>
+<p><span class="math display">\[ T = \frac{\bar{X_1} - \bar{X_2}}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} }} \sim t_{df} \\ \space \\ \space \\ \text{where:} \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad  \\ s_j = \frac{\sum_{i=1}^n(X_{ij} - \bar{X}_j)^2} {n_j-1} \quad \quad \quad \quad \quad \quad \quad \quad  \\ \space \\df = \frac{(s_1^2/n_1 + s_2^2/n_2 )^2}{(s_1^2/n_1)/(n_1-1) + (s_2^2/n_2)/(n_2-1)}\]</span> <br></p>
+<p>Once again we will use the “t.test()” function in R to perform this test at an alpha level of 0.05. The null hypothesis for this test is that the mean change in satisfaction scores does not differ between the two factories. The alternative hypothesis is that it does. Table Q6B.2 reports the results of this test.</p>
+<hr />
+<table style="width:36%;">
+<colgroup>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Test Statistic</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">3.978</td>
+<td align="center">0.0002182</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q6B.2:</strong> Results of t-test for a difference in the mean <em>change</em> satisfaction scores between the two factories.</p>
+<hr />
+<p><br></p>
+<p>The p-value for the observed test statistic is much lower than our alpha level so we must reject our null hypothesis. We conclude that there is a difference in the mean change in satisfaction scores (e.g. <em>SatisImprov</em>) between the two factories.</p>
+<p><br> <br></p>
+</div>
+<div id="i-1" class="section level4">
+<h4>I</h4>
+<p>The formula for constructing a 95% confidence interval for the mean <em>SatisImprov</em> (change in satisfaction scores, <span class="math inline">\(\mu_c\)</span>) at the factory is given below:</p>
+<p><span class="math display">\[ 95\% \text{ CI}[\mu_c] = \overline{SatisImprov} \space \pm t_{29, \space (1 - 0.025)} * \sqrt{\frac{s^2}{29}}\]</span></p>
+<p>We can use the R function “t.test()” to aquire this confidence interval. The interval is reported in table Q6B.3.</p>
+<hr />
+<table style="width:54%;">
+<colgroup>
+<col width="15%"></col>
+<col width="19%"></col>
+<col width="19%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Estimate</th>
+<th align="center">Lower Bound</th>
+<th align="center">Upper Bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">4.133</td>
+<td align="center">2.369</td>
+<td align="center">5.898</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q6B.3:</strong> Point estimate and 95% confidence interval limits for the mean <em>SatisImprov</em> (change in satisfaction scores) at the pilot factory.</p>
+<hr />
+<p><br></p>
+<p>We are 95% confident that the interval 2.369 - 5.898 includes the mean <em>SatisImprov</em> (change in satisfaction score) at the pilot factory.</p>
+<p><br> <br> <br></p>
+</div>
+</div>
 </div>
 </div>
 <div id="appendix" class="section level1">
