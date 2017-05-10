@@ -889,11 +889,311 @@ s.fit$cov.unscaled</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Obtain the deviance residuals and present them in an index plot. Do there appear to be any outlying cases?</li>
 <li>Assuming that the fitted model is appropriate, use the likelihood ratio test to determine whether gender (X2 ) can be dropped from the model: control a at 0.05. State the full and reduced models, decision rule, and conclusion. What is the P-value of the test?</li>
-<li>For the fitted model containing only X1, X3 and X4 in first-order terms, obtain an approximate 95% confidence interval for b1. Interpret your confidence interval. Does aerobic exercise reduce the frequency of falls when controlling for balance and strength?</li>
+<li>For the fitted model containing only X1, X3 and X4 in first-order terms, obtain an approximate 95% confidence interval for Beta1. Interpret your confidence interval. Does aerobic exercise reduce the frequency of falls when controlling for balance and strength?</li>
 <li>Fit the four-simple Poisson regression models with one independent variable, one X , at a time. Interpret the results.</li>
 </ol>
 </blockquote>
+<p><br></p>
+<pre class="r"><code>## Import Data
+q9data &lt;- data.frame(read.table(&quot;data/GeriatricStudy.txt&quot;, header = F, sep = &quot;&quot;))
+colnames(q9data) &lt;- c(&quot;falls&quot;, &quot;intervention&quot;, &quot;gender&quot;, &quot;balance&quot;, &quot;strength&quot;)</code></pre>
+<p><br></p>
+<div id="part-a-6" class="section level3">
+<h3>Part A</h3>
+<p>We will use the R function “glm()” to fit the Poisson regression model. See below:</p>
+<pre class="r"><code>fit &lt;- glm(falls ~ intervention + gender + balance + strength, data = q9data, family = &quot;poisson&quot;)</code></pre>
+<p>We can use the “summary()” to create a summary object of this model which contains the estimated coefficients and their standard errors as well as lots of other model information. See below:</p>
+<pre class="r"><code>s.fit &lt;- summary(fit)
+s.fit</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ intervention + gender + balance + strength, 
+##     family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1854  -0.7819  -0.2564   0.5449   2.3626  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.489467   0.336869   1.453  0.14623    
+## intervention -1.069403   0.133154  -8.031 9.64e-16 ***
+## gender       -0.046606   0.119970  -0.388  0.69766    
+## balance       0.009470   0.002953   3.207  0.00134 ** 
+## strength      0.008566   0.004312   1.986  0.04698 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 108.79  on 95  degrees of freedom
+## AIC: 377.29
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>Table Q9A.1 reports the estimated regression coefficients, their standard errors, and their p-values.</p>
+<hr />
+<table style="width:96%;">
+<colgroup>
+<col width="26%"></col>
+<col width="33%"></col>
+<col width="23%"></col>
+<col width="12%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Estimated Coefficient</th>
+<th align="center">Standard Error</th>
+<th align="center">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Intercept</strong></td>
+<td align="center">0.4895</td>
+<td align="center">0.3369</td>
+<td align="center">0.1462</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Intervention</strong></td>
+<td align="center">-1.069</td>
+<td align="center">0.1332</td>
+<td align="center">9.642e-16</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Gender</strong></td>
+<td align="center">-0.04661</td>
+<td align="center">0.12</td>
+<td align="center">0.6977</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Balance</strong></td>
+<td align="center">0.00947</td>
+<td align="center">0.002953</td>
+<td align="center">0.001341</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Strength</strong></td>
+<td align="center">0.008566</td>
+<td align="center">0.004312</td>
+<td align="center">0.04698</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table Q9A.1:</strong> The estimated regression coefficients, their standard errors, and their p-values.</p>
+<p>Using the above regression coefficients the estimated response function for the mean number of falls <span class="math inline">\(\widehat{\mu}_F\)</span> is:</p>
+<p><span class="math display">\[ \widehat{\mu}_F = e^{ 0.4895 - 1.069 *X_1 - 0.04661*X_2 + 0.00947*X_3 + 0.008566*X_4 } \\ log(\widehat{\mu}_F) =  0.4895 - 1.069 *X_1 - 0.04661*X_2 + 0.00947*X_3 + 0.008566*X_4  \]</span></p>
+<p>Where <span class="math inline">\(X_1\)</span> equals 0 if the intervention the individual receives is just education and 1 if they received education and aerobic exercise. <span class="math inline">\(X_2\)</span> equals 0 if the individual is female and 1 if they are male. <span class="math inline">\(X_3\)</span> is the individuals balance index, and <span class="math inline">\(X_4\)</span> is the individuals strength index.</p>
 <p><br> <br></p>
+</div>
+<div id="part-b-6" class="section level3">
+<h3>Part B</h3>
+<p>We can obtain the deviance residuals from the summary object of our fitted model. We will then use the R plot function to create an index plot of the deviance residuals. See below:</p>
+<pre class="r"><code>plot(s.fit$deviance.resid, type = &quot;l&quot;,
+     main = &quot;Index Plot of Deviance Residuals&quot;,
+     xlab = &quot;Subject Index&quot;,
+     ylab = &quot;Deviance Residual&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
+<p><br></p>
+<p>From the plot above there don’t appear to be any subjects with deviance residuals that are excessively more positive or negative than the rest. There don’t appear to be any outlying observations.</p>
+<p><br> <br></p>
+</div>
+<div id="part-c-3" class="section level3">
+<h3>Part C</h3>
+<p>We will use a likelihood ratio test of comparitive fit to determine if gender <span class="math inline">\(X_2\)</span> can be dropped from the model. We will use an alpha level of 0.05. The reduced model for this test (“fit.r”) is the model without gender which will fit using the R “glm()” function. See below:</p>
+<pre class="r"><code>fit.r &lt;- glm(falls ~ intervention + balance + strength, data = q9data, family = &quot;poisson&quot;)</code></pre>
+<p>We can use the “summary()” function in R to create a summary object (s.fit.r) of the reduced model. This summary object contains the estimated regression coefficients, their standard errors, and other information.</p>
+<pre class="r"><code>s.fit.r &lt;- summary(fit.r)
+s.fit.r</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ intervention + balance + strength, family = &quot;poisson&quot;, 
+##     data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.2152  -0.7512  -0.2594   0.5830   2.2893  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.443890   0.317289   1.399  0.16181    
+## intervention -1.077770   0.131415  -8.201 2.38e-16 ***
+## balance       0.009471   0.002957   3.203  0.00136 ** 
+## strength      0.008979   0.004190   2.143  0.03209 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 108.94  on 96  degrees of freedom
+## AIC: 375.44
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>From the above summary we can get our estimated regression coefficients, thus the reduced model is:</p>
+<p><span class="math display">\[ log(\widehat{\mu}_F) =  0.4439 - 1.078 *X_1 + 0.009471*X_3 + 0.008979*X_4 \]</span></p>
+<p>While the full model is the model containing all four explanatory variables:</p>
+<p><span class="math display">\[ log(\widehat{\mu}_F) =  0.4895 - 1.069 *X_1 - 0.04661*X_2 + 0.00947*X_3 + 0.008566*X_4 \]</span></p>
+<p>Where <span class="math inline">\(X_1\)</span> equals 0 if the intervention the individual receives is just education and 1 if they received education and aerobic exercise. <span class="math inline">\(X_2\)</span> equals 0 if the individual is female and 1 if they are male. <span class="math inline">\(X_3\)</span> is the individuals balance index, and <span class="math inline">\(X_4\)</span> is the individuals strength index.</p>
+<p>Now that we have defined our full and reduced models we will perform the likelihood ratio test to determine whether gender <span class="math inline">\(X_2\)</span> can be dropped from the model. We will use an alpha level of 0.05. This test compares the deviance of the reduced model to that of the full model. The null hypothesis for this test is that reduced model without gender fits the data just as well as the model containing gender, that is, gender offers no useful information in predicting the number of falls and can thus be dropped. The alternative hypothesis is that the reduced model does not fit the data as well as the full model, and thus gender cannot be dropped. The test statistic for this test is the difference between the deviance of the reduced model and the full model. Under the null hypothesis this test statistic has a chi-squared distribution with degrees of freedom equal to the difference between the the degrees of freedom in the reduced model and in the full model:</p>
+<p><span class="math display">\[ Deviance_{red} - Deviance_{full} \sim \chi_{df_{red} - df_{full}}^2 \]</span></p>
+<p>From our model summaries we can see that our full model has 95 degrees of freedom while our reduced model has 96 degrees of freedom, so our test statistic will have 1 degree of freedom. We can also obtain the model deviances from the model summary objects, see below:</p>
+<pre class="r"><code>dev.f &lt;- s.fit$deviance
+dev.r &lt;- s.fit.r$deviance
+dif &lt;- dev.r - dev.f
+dif</code></pre>
+<pre><code>## [1] 0.1509982</code></pre>
+<p>Thus our test-statistic is:</p>
+<p><span class="math display">\[ Deviance_{red} - Deviance_{full} = 0.1509982 \sim \chi_{1}^2 \]</span></p>
+<p><br></p>
+<p>We will use the R function “pchisq()” to find the probability (p-value) of observing a test statistic as large or larger than the observed test statistic above. Since our alpha level is 0.05, if the p-value is less than 0.05 we will reject the null hypothesis, otherwise we will fail to reject the null hypothesis.</p>
+<pre class="r"><code>pchisq(0.1509982, 1, lower.tail = F)</code></pre>
+<pre><code>## [1] 0.6975833</code></pre>
+<p>Since the p-value (0.6975833) is greater than 0.05 we fail to reject the null hypothesis and conclude that the reduced model provides just as good fit as the full model thus we can drop gender <span class="math inline">\(X_2\)</span> from the model.</p>
+<p><br> <br></p>
+</div>
+<div id="part-d" class="section level3">
+<h3>Part D</h3>
+<p>We can use the summary object (s.fit.r) of the reduced model to find the standard error of <span class="math inline">\(\widehat{\beta}_1\)</span> (the coefficient for whether or not the individual received aerobic exercise in addition to education). See below:</p>
+<pre class="r"><code>s.fit.r$coefficients</code></pre>
+<pre><code>##                 Estimate  Std. Error   z value     Pr(&gt;|z|)
+## (Intercept)   0.44389020 0.317288896  1.399010 1.618101e-01
+## intervention -1.07777033 0.131415209 -8.201260 2.378799e-16
+## balance       0.00947114 0.002957417  3.202504 1.362385e-03
+## strength      0.00897921 0.004189522  2.143254 3.209270e-02</code></pre>
+<p>From the output above we can see the standard error of <span class="math inline">\(\widehat{\beta}_1\)</span> is 0.131415209. Using this value we will compute the 95% confidence interval for <span class="math inline">\(\beta_1\)</span>. Since our sample is large, we can use the standard normal distribution and our critical value is thus <span class="math inline">\(Z_{0.975} = 1.96\)</span>. Thus our 95% confidence interval is:</p>
+<p><span class="math display">\[ 95\% \text{ CI}[\beta_1] = \widehat{\beta}_1 \pm Z_{0.975}*SE[\widehat{\beta}_1] = -1.07777033 \pm 1.96*0.131415209 = (-1.335344, \space -0.8201965) \]</span></p>
+<p>Thus, we are 95% confident that the interval (-1.34, -0.820) includes the true regression parameter <span class="math inline">\(\beta_1\)</span> for the impact of aerobic exercise and education (rather than just education) on the number of falls. Since 0 is not included in this interval, and since the interval only includes negative values (negative association), I conclude that aerobic exercise reduces the frequency of falls when controlling for strength and balance.</p>
+<p><br> <br></p>
+</div>
+<div id="part-e" class="section level3">
+<h3>Part E</h3>
+<div id="intervention" class="section level4">
+<h4>Intervention</h4>
+<p>Below is the model summary for the Poisson model of fall frequency using only the explanatory variable <em>Intervention</em>:</p>
+<pre class="r"><code>fitI &lt;- glm(falls ~ intervention, data = q9data, family = &quot;poisson&quot;)
+s.fitI &lt;- summary(fitI)
+s.fitI</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ intervention, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0057  -0.7620  -0.2495   0.6625   2.5703  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   1.50851    0.06652  22.678  &lt; 2e-16 ***
+## intervention -1.06383    0.13132  -8.101 5.45e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 123.98  on 98  degrees of freedom
+## AIC: 386.48
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>The estimated regression coefficient for intervention (whether or not the individual received aerobic exercise in addition to education rather than just education) is -1.06383 indicating that the aerobic exercise intervention is estimated to <em>decrease</em> fall frequency by <span class="math inline">\(e^1.06383\)</span> fold compared to just education alone. The p-value for this coefficient is very low (5.45e-16 &lt;&lt;&lt; 0.05) indicating that it is statistically significant.</p>
+<p><br> <br></p>
+</div>
+<div id="gender" class="section level4">
+<h4>Gender</h4>
+<p>Below is the model summary for the Poisson model of fall frequency using only the explanatory variable <em>Gender</em>:</p>
+<pre class="r"><code>fitG &lt;- glm(falls ~ gender, data = q9data, family = &quot;poisson&quot;)
+s.fitG &lt;- summary(fitG)
+s.fitG</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ gender, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6337  -1.1678  -0.2573   0.2788   3.4356  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  1.24360    0.07833  15.877   &lt;2e-16 ***
+## gender      -0.26513    0.11501  -2.305   0.0211 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 193.86  on 98  degrees of freedom
+## AIC: 456.36
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>The estimated regression coefficient for gender (female = 0, male = 1) is -0.26513 indicating that the frequency of falls is estimated to be <span class="math inline">\(e^0.26513\)</span> fold <em>lower</em> for males than females. The p-value (0.0211) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant. However, we know from our previous model that if we control for intervention, balance, and strength the significance of this variable goes away.</p>
+<p><br> <br></p>
+</div>
+<div id="balance" class="section level4">
+<h4>Balance</h4>
+<p>Below is the model summary for the Poisson model of fall frequency using only the explanatory variable <em>Balance</em>:</p>
+<pre class="r"><code>fitB &lt;- glm(falls ~ balance, data = q9data, family = &quot;poisson&quot;)
+s.fitB &lt;- summary(fitB)
+s.fitB</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ balance, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.8128  -1.0883  -0.3222   0.6404   3.7148  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) 0.607376   0.177460   3.423  0.00062 ***
+## balance     0.009251   0.002986   3.098  0.00195 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 189.60  on 98  degrees of freedom
+## AIC: 452.09
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>The estimated regression coefficient for balance index (higher balance index -&gt; better ballance) is 0.009251 indicating that the frequency of falls is estimated to be <span class="math inline">\(e^0.009251\)</span> fold <em>higher</em> for every increment increase in balance index. The p-value (0.00195) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant. This is a surprising result, because intuitively we would think individuals with better balance would have a lower fall frequency not higher.</p>
+<p><br> <br></p>
+</div>
+<div id="strength" class="section level4">
+<h4>Strength</h4>
+<p>Below is the model summary for the Poisson model of fall frequency using only the explanatory variable <em>Strength</em>:</p>
+<pre class="r"><code>fitS &lt;- glm(falls ~ strength, data = q9data, family = &quot;poisson&quot;)
+s.fitS &lt;- summary(fitS)
+s.fitS</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ strength, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6911  -1.2380  -0.2467   0.6115   3.0345  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept) 0.608621   0.262028   2.323   0.0202 *
+## strength    0.008170   0.004097   1.994   0.0461 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 195.19  on 98  degrees of freedom
+## AIC: 457.69
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>The estimated regression coefficient for strength index (higher strength index -&gt; stronger) is 0.008170 indicating that the frequency of falls is estimated to be <span class="math inline">\(e^0.008170\)</span> fold <em>higher</em> for every increment increase in strength index. The p-value (0.0461) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant, but it is boarder-line. This is a surprising result, because intuitively we would think stronger individuals would not fall as frequently.</p>
+<p><br> <br> <br></p>
+</div>
+</div>
 </div>
 </div>
 <div id="appendix" class="section level1">
@@ -1257,6 +1557,244 @@ val</code></pre>
 </div>
 <div id="a9" class="section level2">
 <h2>A9</h2>
+<pre class="r"><code>## Import Data
+q9data &lt;- data.frame(read.table(&quot;data/GeriatricStudy.txt&quot;, header = F, sep = &quot;&quot;))
+colnames(q9data) &lt;- c(&quot;falls&quot;, &quot;intervention&quot;, &quot;gender&quot;, &quot;balance&quot;, &quot;strength&quot;)
+
+#########################################
+
+## Part A
+fit &lt;- glm(falls ~ intervention + gender + balance + strength, data = q9data, family = &quot;poisson&quot;)
+
+#########################################
+
+s.fit &lt;- summary(fit)
+s.fit</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ intervention + gender + balance + strength, 
+##     family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1854  -0.7819  -0.2564   0.5449   2.3626  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.489467   0.336869   1.453  0.14623    
+## intervention -1.069403   0.133154  -8.031 9.64e-16 ***
+## gender       -0.046606   0.119970  -0.388  0.69766    
+## balance       0.009470   0.002953   3.207  0.00134 ** 
+## strength      0.008566   0.004312   1.986  0.04698 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 108.79  on 95  degrees of freedom
+## AIC: 377.29
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>#########################################
+
+x &lt;- data.frame(e = as.numeric(s.fit$coefficients[,1]),
+                se = as.numeric(s.fit$coefficients[,2]),
+                p = as.numeric(s.fit$coefficients[,4]))
+
+colnames(x) &lt;- c(&quot;Estimated Coefficient&quot;, &quot;Standard Error&quot;, &quot;P-Value&quot;)
+rownames(x) &lt;- c(&quot;Intercept&quot;, &quot;Intervention&quot;, &quot;Gender&quot;, &quot;Balance&quot;, &quot;Strength&quot;)
+
+pandoc.table(x,
+             caption = &quot;**Table Q9A.1:** The estimated regression coefficients, their standard errors, and their p-values.&quot;,
+             split.table = Inf)</code></pre>
+<pre><code>## 
+## ---------------------------------------------------------------------
+##       &amp;nbsp;        Estimated Coefficient   Standard Error   P-Value 
+## ------------------ ----------------------- ---------------- ---------
+##   **Intercept**            0.4895               0.3369       0.1462  
+## 
+##  **Intervention**          -1.069               0.1332      9.642e-16
+## 
+##     **Gender**            -0.04661               0.12        0.6977  
+## 
+##    **Balance**             0.00947             0.002953     0.001341 
+## 
+##    **Strength**           0.008566             0.004312      0.04698 
+## ---------------------------------------------------------------------
+## 
+## **Table Q9A.1:** The estimated regression coefficients, their standard errors, and their p-values.</code></pre>
+<pre class="r"><code>#########################################
+
+## Part B
+plot(s.fit$deviance.resid, type = &quot;l&quot;,
+     main = &quot;Index Plot of Deviance Residuals&quot;,
+     xlab = &quot;Subject Index&quot;,
+     ylab = &quot;Deviance Residual&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
+<pre class="r"><code>#########################################
+
+## Part C
+fit.r &lt;- glm(falls ~ intervention + balance + strength, data = q9data, family = &quot;poisson&quot;)
+
+#########################################
+
+s.fit.r &lt;- summary(fit.r)
+s.fit.r</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ intervention + balance + strength, family = &quot;poisson&quot;, 
+##     data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.2152  -0.7512  -0.2594   0.5830   2.2893  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.443890   0.317289   1.399  0.16181    
+## intervention -1.077770   0.131415  -8.201 2.38e-16 ***
+## balance       0.009471   0.002957   3.203  0.00136 ** 
+## strength      0.008979   0.004190   2.143  0.03209 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 108.94  on 96  degrees of freedom
+## AIC: 375.44
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>#########################################
+
+dev.f &lt;- s.fit$deviance
+dev.r &lt;- s.fit.r$deviance
+dif &lt;- dev.r - dev.f
+dif</code></pre>
+<pre><code>## [1] 0.1509982</code></pre>
+<pre class="r"><code>#########################################
+
+pchisq(0.1509982, 1, lower.tail = F)</code></pre>
+<pre><code>## [1] 0.6975833</code></pre>
+<pre class="r"><code>#########################################
+
+## Part D
+s.fit.r$coefficients</code></pre>
+<pre><code>##                 Estimate  Std. Error   z value     Pr(&gt;|z|)
+## (Intercept)   0.44389020 0.317288896  1.399010 1.618101e-01
+## intervention -1.07777033 0.131415209 -8.201260 2.378799e-16
+## balance       0.00947114 0.002957417  3.202504 1.362385e-03
+## strength      0.00897921 0.004189522  2.143254 3.209270e-02</code></pre>
+<pre class="r"><code>#########################################
+
+## Part E
+fitI &lt;- glm(falls ~ intervention, data = q9data, family = &quot;poisson&quot;)
+s.fitI &lt;- summary(fitI)
+s.fitI</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ intervention, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0057  -0.7620  -0.2495   0.6625   2.5703  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   1.50851    0.06652  22.678  &lt; 2e-16 ***
+## intervention -1.06383    0.13132  -8.101 5.45e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 123.98  on 98  degrees of freedom
+## AIC: 386.48
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>#########################################
+
+fitG &lt;- glm(falls ~ gender, data = q9data, family = &quot;poisson&quot;)
+s.fitG &lt;- summary(fitG)
+s.fitG</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ gender, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6337  -1.1678  -0.2573   0.2788   3.4356  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  1.24360    0.07833  15.877   &lt;2e-16 ***
+## gender      -0.26513    0.11501  -2.305   0.0211 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 193.86  on 98  degrees of freedom
+## AIC: 456.36
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>#########################################
+
+fitB &lt;- glm(falls ~ balance, data = q9data, family = &quot;poisson&quot;)
+s.fitB &lt;- summary(fitB)
+s.fitB</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ balance, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.8128  -1.0883  -0.3222   0.6404   3.7148  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) 0.607376   0.177460   3.423  0.00062 ***
+## balance     0.009251   0.002986   3.098  0.00195 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 189.60  on 98  degrees of freedom
+## AIC: 452.09
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>#########################################
+
+fitS &lt;- glm(falls ~ strength, data = q9data, family = &quot;poisson&quot;)
+s.fitS &lt;- summary(fitS)
+s.fitS</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = falls ~ strength, family = &quot;poisson&quot;, data = q9data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6911  -1.2380  -0.2467   0.6115   3.0345  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept) 0.608621   0.262028   2.323   0.0202 *
+## strength    0.008170   0.004097   1.994   0.0461 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 199.19  on 99  degrees of freedom
+## Residual deviance: 195.19  on 98  degrees of freedom
+## AIC: 457.69
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 </div>
 

@@ -866,7 +866,7 @@ any outlying cases?
 whether gender (X2 ) can be dropped from the model: control a at 0.05. State the full
 and reduced models, decision rule, and conclusion. What is the P-value of the test?
 >d. For the fitted model containing only X1, X3 and X4 in first-order terms, obtain an
-approximate 95% confidence interval for b1. Interpret your confidence interval. Does
+approximate 95% confidence interval for Beta1. Interpret your confidence interval. Does
 aerobic exercise reduce the frequency of falls when controlling for balance and strength?
 >e. Fit the four-simple Poisson regression models with one independent variable, one X , at
 a time. Interpret the results.
@@ -875,9 +875,210 @@ a time. Interpret the results.
 
 ```{r}
 ## Import Data
-q9data <- data.frame(read.table("GeriatricStudy.txt", header = T, sep = ""))
+q9data <- data.frame(read.table("data/GeriatricStudy.txt", header = F, sep = ""))
+colnames(q9data) <- c("falls", "intervention", "gender", "balance", "strength")
+```
+
+<br>
+
+### Part A
 
 
+  We will use the R function "glm()" to fit the Poisson regression model. See below:
+  
+```{r}
+fit <- glm(falls ~ intervention + gender + balance + strength, data = q9data, family = "poisson")
+```
+
+  We can use the "summary()" to create a summary object of this model which contains the estimated coefficients and their standard errors as well as lots of other model information. See below:
+  
+```{r}
+s.fit <- summary(fit)
+s.fit
+```
+
+  Table Q9A.1 reports the estimated regression coefficients, their standard errors, and their p-values.
+
+***
+
+```{r, echo = F, results = "asis"}
+
+x <- data.frame(e = as.numeric(s.fit$coefficients[,1]),
+                se = as.numeric(s.fit$coefficients[,2]),
+                p = as.numeric(s.fit$coefficients[,4]))
+
+colnames(x) <- c("Estimated Coefficient", "Standard Error", "P-Value")
+rownames(x) <- c("Intercept", "Intervention", "Gender", "Balance", "Strength")
+
+pandoc.table(x,
+             caption = "**Table Q9A.1:** The estimated regression coefficients, their standard errors, and their p-values.",
+             split.table = Inf)
+
+```
+
+
+  Using the above regression coefficients the estimated response function for the mean number of falls $\widehat{\mu}_F$ is:
+  
+  $$ \widehat{\mu}_F = e^{ 0.4895 - 1.069 *X_1 - 0.04661*X_2 + 0.00947*X_3 + 0.008566*X_4 } \\ log(\widehat{\mu}_F) =  0.4895 - 1.069 *X_1 - 0.04661*X_2 + 0.00947*X_3 + 0.008566*X_4  $$
+
+  Where $X_1$ equals 0 if the intervention the individual receives is just education and 1 if they received education and aerobic exercise. $X_2$ equals 0 if the individual is female and 1 if they are male. $X_3$ is the individuals balance index, and $X_4$ is the individuals strength index.
+  
+<br>
+<br>
+
+### Part B
+
+  We can obtain the deviance residuals from the summary object of our fitted model. We will then use the R plot function to create an index plot of the deviance residuals. See below:
+
+```{r}
+plot(s.fit$deviance.resid, type = "l",
+     main = "Index Plot of Deviance Residuals",
+     xlab = "Subject Index",
+     ylab = "Deviance Residual")
+```
+
+<br>
+
+  From the plot above there don't appear to be any subjects with deviance residuals that are excessively more positive or negative than the rest. There don't appear to be any outlying observations.
+  
+<br>
+<br>
+
+### Part C
+
+  We will use a likelihood ratio test of comparitive fit to determine if gender $X_2$ can be dropped from the model. We will use an alpha level of 0.05. The reduced model for this test ("fit.r") is the model without gender which will fit using the R "glm()" function. See below:
+  
+```{r}
+fit.r <- glm(falls ~ intervention + balance + strength, data = q9data, family = "poisson")
+```
+
+  We can use the "summary()" function in R to create a summary object (s.fit.r) of the reduced model. This summary object contains the estimated regression coefficients, their standard errors, and other information.
+  
+```{r}
+s.fit.r <- summary(fit.r)
+s.fit.r
+```
+
+  From the above summary we can get our estimated regression coefficients, thus the reduced model is:
+  
+  $$ log(\widehat{\mu}_F) =  0.4439 - 1.078 *X_1 + 0.009471*X_3 + 0.008979*X_4 $$
+
+  While the full model is the model containing all four explanatory variables:
+  
+  $$ log(\widehat{\mu}_F) =  0.4895 - 1.069 *X_1 - 0.04661*X_2 + 0.00947*X_3 + 0.008566*X_4 $$
+  
+  Where $X_1$ equals 0 if the intervention the individual receives is just education and 1 if they received education and aerobic exercise. $X_2$ equals 0 if the individual is female and 1 if they are male. $X_3$ is the individuals balance index, and $X_4$ is the individuals strength index.
+  
+  Now that we have defined our full and reduced models we will perform the likelihood ratio test to determine whether gender $X_2$ can be dropped from the model. We will use an alpha level of 0.05. This test compares the deviance of the reduced model to that of the full model. The null hypothesis for this test is that reduced model without gender fits the data just as well as the model containing gender, that is, gender offers no useful information in predicting the number of falls and can thus be dropped. The alternative hypothesis is that the reduced model does not fit the data as well as the full model, and thus gender cannot be dropped. The test statistic for this test is the difference between the deviance of the reduced model and the full model. Under the null hypothesis this test statistic has a chi-squared distribution with degrees of freedom equal to the difference between the the degrees of freedom in the reduced model and in the full model:
+  
+  $$ Deviance_{red} - Deviance_{full} \sim \chi_{df_{red} - df_{full}}^2 $$
+  
+  From our model summaries we can see that our full model has 95 degrees of freedom while our reduced model has 96 degrees of freedom, so our test statistic will have 1 degree of freedom. We can also obtain the model deviances from the model summary objects, see below:
+  
+```{r}
+dev.f <- s.fit$deviance
+dev.r <- s.fit.r$deviance
+dif <- dev.r - dev.f
+dif
+```
+
+  Thus our test-statistic is:
+
+  $$ Deviance_{red} - Deviance_{full} = 0.1509982 \sim \chi_{1}^2 $$  
+
+<br>
+
+  We will use the R function "pchisq()" to find the probability (p-value) of observing a test statistic as large or larger than the observed test statistic above. Since our alpha level is 0.05, if the p-value is less than 0.05 we will reject the null hypothesis, otherwise we will fail to reject the null hypothesis.
+
+```{r}
+pchisq(0.1509982, 1, lower.tail = F)
+```
+
+  Since the p-value (0.6975833) is greater than 0.05 we fail to reject the null hypothesis and conclude that the reduced model provides just as good fit as the full model thus we can drop gender $X_2$ from the model.
+  
+<br>
+<br>
+
+### Part D
+
+
+  We can use the summary object (s.fit.r) of the reduced model to find the standard error of $\widehat{\beta}_1$ (the coefficient for whether or not the individual received aerobic exercise in addition to education). See below:
+  
+```{r}
+s.fit.r$coefficients
+```
+  
+  From the output above we can see the standard error of $\widehat{\beta}_1$ is 0.131415209. Using this value we will compute the 95% confidence interval for $\beta_1$. Since our sample is large, we can use the standard normal distribution and our critical value is thus $Z_{0.975} = 1.96$. Thus our 95% confidence interval is:
+  
+  $$ 95\% \text{ CI}[\beta_1] = \widehat{\beta}_1 \pm Z_{0.975}*SE[\widehat{\beta}_1] = -1.07777033 \pm 1.96*0.131415209 = (-1.335344, \space -0.8201965) $$
+
+  Thus, we are 95% confident that the interval (-1.34, -0.820) includes the true regression parameter $\beta_1$ for the impact of aerobic exercise and education (rather than just education) on the number of falls. Since 0 is not included in this interval, and since the interval only includes negative values (negative association), I conclude that aerobic exercise reduces the frequency of falls when controlling for strength and balance.
+  
+<br>
+<br>
+
+### Part E
+
+#### Intervention
+
+  Below is the model summary for the Poisson model of fall frequency using only the explanatory variable *Intervention*:
+
+```{r}
+fitI <- glm(falls ~ intervention, data = q9data, family = "poisson")
+s.fitI <- summary(fitI)
+s.fitI
+```
+
+  The estimated regression coefficient for intervention (whether or not the individual received aerobic exercise in addition to education rather than just education) is -1.06383 indicating that the aerobic exercise intervention is estimated to *decrease* fall frequency by $e^1.06383$ fold compared to just education alone. The p-value for this coefficient is very low (5.45e-16 <<< 0.05) indicating that it is statistically significant.
+  
+<br>
+<br>
+
+#### Gender
+
+Below is the model summary for the Poisson model of fall frequency using only the explanatory variable *Gender*:
+
+```{r}
+fitG <- glm(falls ~ gender, data = q9data, family = "poisson")
+s.fitG <- summary(fitG)
+s.fitG
+```
+
+  The estimated regression coefficient for gender (female = 0, male = 1) is -0.26513 indicating that the frequency of falls is estimated to be $e^0.26513$ fold *lower* for males than females. The p-value (0.0211) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant. However, we know from our previous model that if we control for intervention, balance, and strength the significance of this variable goes away.
+
+<br>
+<br>
+
+#### Balance
+
+Below is the model summary for the Poisson model of fall frequency using only the explanatory variable *Balance*:
+
+```{r}
+fitB <- glm(falls ~ balance, data = q9data, family = "poisson")
+s.fitB <- summary(fitB)
+s.fitB
+```
+
+  The estimated regression coefficient for balance index (higher balance index -> better ballance) is 0.009251 indicating that the frequency of falls is estimated to be $e^0.009251$ fold *higher* for every increment increase in balance index. The p-value (0.00195) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant. This is a surprising result, because intuitively we would think individuals with better balance would have a lower fall frequency not higher.
+  
+
+<br>
+<br>
+
+#### Strength
+
+  Below is the model summary for the Poisson model of fall frequency using only the explanatory variable *Strength*:
+
+```{r}
+fitS <- glm(falls ~ strength, data = q9data, family = "poisson")
+s.fitS <- summary(fitS)
+s.fitS
+```
+
+  The estimated regression coefficient for strength index (higher strength index -> stronger) is 0.008170 indicating that the frequency of falls is estimated to be $e^0.008170$ fold *higher* for every increment increase in strength index. The p-value (0.0461) for this coefficient is less than 0.05 indicating that at a significance level of 5% it is statistically significant, but it is boarder-line. This is a surprising result, because intuitively we would think stronger individuals would not fall as frequently.
+
+
+<br>
 <br>
 <br>
 
@@ -1193,3 +1394,94 @@ qt(0.975, 23)
 <br>
 
 ## A9
+
+```{r}
+## Import Data
+q9data <- data.frame(read.table("data/GeriatricStudy.txt", header = F, sep = ""))
+colnames(q9data) <- c("falls", "intervention", "gender", "balance", "strength")
+
+#########################################
+
+## Part A
+fit <- glm(falls ~ intervention + gender + balance + strength, data = q9data, family = "poisson")
+
+#########################################
+
+s.fit <- summary(fit)
+s.fit
+
+#########################################
+
+x <- data.frame(e = as.numeric(s.fit$coefficients[,1]),
+                se = as.numeric(s.fit$coefficients[,2]),
+                p = as.numeric(s.fit$coefficients[,4]))
+
+colnames(x) <- c("Estimated Coefficient", "Standard Error", "P-Value")
+rownames(x) <- c("Intercept", "Intervention", "Gender", "Balance", "Strength")
+
+pandoc.table(x,
+             caption = "**Table Q9A.1:** The estimated regression coefficients, their standard errors, and their p-values.",
+             split.table = Inf)
+
+#########################################
+
+## Part B
+plot(s.fit$deviance.resid, type = "l",
+     main = "Index Plot of Deviance Residuals",
+     xlab = "Subject Index",
+     ylab = "Deviance Residual")
+
+#########################################
+
+## Part C
+fit.r <- glm(falls ~ intervention + balance + strength, data = q9data, family = "poisson")
+
+#########################################
+
+s.fit.r <- summary(fit.r)
+s.fit.r
+
+#########################################
+
+dev.f <- s.fit$deviance
+dev.r <- s.fit.r$deviance
+dif <- dev.r - dev.f
+dif
+
+#########################################
+
+pchisq(0.1509982, 1, lower.tail = F)
+
+#########################################
+
+## Part D
+s.fit.r$coefficients
+
+#########################################
+
+## Part E
+fitI <- glm(falls ~ intervention, data = q9data, family = "poisson")
+s.fitI <- summary(fitI)
+s.fitI
+
+#########################################
+
+fitG <- glm(falls ~ gender, data = q9data, family = "poisson")
+s.fitG <- summary(fitG)
+s.fitG
+
+#########################################
+
+fitB <- glm(falls ~ balance, data = q9data, family = "poisson")
+s.fitB <- summary(fitB)
+s.fitB
+
+#########################################
+
+fitS <- glm(falls ~ strength, data = q9data, family = "poisson")
+s.fitS <- summary(fitS)
+s.fitS
+```
+
+
+
